@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Variety - Order</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+    tailwind.config={theme:{extend:{colors:{gold:{300:'#E2C97E',400:'#C9A84C',500:'#B8943A',600:'#A68A35',700:'#8A722D'},dark:{100:'#3A3A38',200:'#2A2A28',300:'#222222',400:'#1C1C1C',500:'#161616',600:'#0E0E0E',700:'#0A0A0A'},cream:{100:'#F0EBE0',200:'#D6D0C2',300:'#9A9488',400:'#5A5650'}},fontFamily:{display:['Playfair Display','serif'],body:['DM Sans','sans-serif']}}}}
+    </script>
+    <style>
+        :root{--accent:#C9A84C;--accent-light:#E2C97E;--bg:#0E0E0E;--card:rgba(28,28,28,0.75);--border:#2A2A28;--text:#F0EBE0;--muted:#9A9488;--card-solid:#1C1C1C}
+        *{box-sizing:border-box;margin:0}body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+        ::selection{background:rgba(201,168,76,0.3);color:#fff}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+        .blob{position:fixed;border-radius:50%;filter:blur(100px);opacity:0.07;pointer-events:none;z-index:0}
+        .blob-1{width:500px;height:500px;background:var(--accent);top:-10%;left:-10%;animation:bf 25s ease-in-out infinite}
+        .blob-2{width:400px;height:400px;background:#6B4423;bottom:-10%;right:-10%;animation:bf 30s ease-in-out infinite reverse}
+        .blob-3{width:300px;height:300px;background:var(--accent-light);top:50%;left:50%;animation:bf 20s ease-in-out infinite 5s}
+        @keyframes bf{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(50px,-30px) scale(1.1)}50%{transform:translate(-20px,40px) scale(.95)}75%{transform:translate(30px,20px) scale(1.05)}}
+        .grain::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+        .view{display:none;opacity:0;transform:translateY(20px)}.view.active{display:block;animation:vi .5s ease forwards}
+        @keyframes vi{to{opacity:1;transform:translateY(0)}}
+        .modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease}
+        .modal-overlay.open{opacity:1;pointer-events:auto}
+        .modal-overlay.open .modal-box{transform:scale(1) translateY(0);opacity:1}
+        .modal-box{transform:scale(.95) translateY(10px);opacity:0;transition:all .3s ease}
+        .glass{background:var(--card);backdrop-filter:blur(12px);border:1px solid rgba(201,168,76,.1)}
+        .btn-gold{background:linear-gradient(135deg,var(--accent),var(--accent-light));color:#0E0E0E;font-weight:700;border:none;cursor:pointer;transition:all .3s ease;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif}
+        .btn-gold:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(201,168,76,.3)}
+        .btn-gold:active{transform:translateY(0)}
+        .btn-gold::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.2) 50%,transparent 70%);transform:translateX(-100%);transition:transform .5s ease}
+        .btn-gold:hover::after{transform:translateX(100%)}
+        .btn-gold:disabled{opacity:.4;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+        .btn-gold:disabled::after{display:none}
+        .swatch{width:52px;height:52px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:all .2s ease;position:relative;flex-shrink:0;overflow:hidden;background:var(--card-solid,#222)}
+        .swatch:hover{transform:scale(1.08)}
+        .swatch.selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,168,76,.3)}
+        .swatch.selected::after{content:'\2713';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;z-index:2;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+        .swatch img{width:100%;height:100%;object-fit:cover;display:block}
+        .swatch-circle{border-radius:50%}.swatch-circle img{border-radius:50%}
+        .size-pill{padding:8px 20px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-weight:500;transition:all .2s ease;font-family:'DM Sans',sans-serif;font-size:14px}
+        .size-pill:hover{border-color:var(--cream-300);color:var(--text)}
+        .size-pill.selected{border-color:var(--accent);background:rgba(201,168,76,.1);color:var(--accent)}
+        .qty-btn{width:40px;height:40px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s ease;font-family:'DM Sans',sans-serif}
+        .qty-btn:hover{border-color:var(--accent);color:var(--accent)}
+        .qty-btn:disabled{opacity:.3;cursor:not-allowed}
+        .order-item{animation:si .3s ease forwards}
+        .order-item.removing{animation:so .3s ease forwards}
+        @keyframes si{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes so{from{opacity:1;transform:translateX(0);height:auto}to{opacity:0;transform:translateX(-20px);height:0;padding:0;margin:0;overflow:hidden}}
+        .input-field{background:rgba(14,14,14,.8);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:12px 16px;width:100%;font-family:'DM Sans',sans-serif;font-size:15px;transition:all .3s ease;outline:none}
+        .input-field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+        .input-field::placeholder{color:var(--cream-400)}
+        .input-field.error{border-color:#D45555;box-shadow:0 0 0 3px rgba(212,85,85,.1)}
+        .input-label{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;display:block}
+        select.input-field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239A9488' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+        select.input-field option{background:#1C1C1C;color:#F0EBE0}
+        textarea.input-field{resize:none;min-height:48px;overflow:hidden}
+        .toast-container{position:fixed;top:20px;right:20px;z-index:200;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+        .toast{padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;animation:ti .3s ease forwards;min-width:260px;max-width:380px;display:flex;align-items:center;gap:10px;box-shadow:0 10px 40px rgba(0,0,0,.3);pointer-events:auto}
+        .toast.removing{animation:to .3s ease forwards}
+        .toast.success{background:#1a3a28;border:1px solid #3DAA6D;color:#7EDDA8}
+        .toast.error{background:#3a1a1a;border:1px solid #D45555;color:#F08888}
+        .toast.info{background:#1a2a3a;border:1px solid #5588CC;color:#88BBEE}
+        .toast.warning{background:#3a2a1a;border:1px solid #CC8855;color:#EEBB88}
+        @keyframes ti{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes to{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(30px)}}
+        .lang-btn{padding:4px 8px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s ease;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif}
+        .lang-btn:hover{color:var(--cream-200)}
+        .lang-btn.active{background:rgba(201,168,76,.15);color:var(--accent)}
+        @keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.4)}70%{box-shadow:0 0 0 12px rgba(201,168,76,0)}}
+        .pulse{animation:pg 2s ease infinite}
+        .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:20px 0}
+        .img-glow{position:relative}
+        .img-glow::before{content:'';position:absolute;inset:-20px;border-radius:20px;background:radial-gradient(ellipse,rgba(201,168,76,.15) 0%,transparent 70%);z-index:-1}
+        .phone-group{display:flex;gap:8px}
+        .phone-group select{width:auto;min-width:120px;flex-shrink:0}
+        .phone-group input{flex:1}
+        body.light-theme{--card:rgba(255,255,255,.8);--card-solid:#fff;--border:rgba(0,0,0,.1);--text:#1A1A18;--muted:#6A6458}
+        body.light-theme .input-field{background:rgba(255,255,255,.9);border-color:var(--border);color:var(--text)}
+        body.light-theme .input-field::placeholder{color:#9A9488}
+        body.light-theme .glass{background:var(--card);border-color:rgba(0,0,0,.08)}
+        body.light-theme .qty-btn{border-color:var(--border);color:var(--text)}
+        body.light-theme .size-pill{border-color:var(--border);color:var(--muted)}
+        body.light-theme .size-pill.selected{border-color:var(--accent);background:rgba(201,168,76,.08);color:#8A722D}
+        body.light-theme .order-item{background:rgba(0,0,0,.04)}
+        body.light-theme .divider{background:linear-gradient(90deg,transparent,rgba(0,0,0,.1),transparent)}
+        body.light-theme .swatch{background:var(--card-solid,#f0f0f0)}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    </style>
+</head>
+<body class="grain min-h-screen">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========== ORDER FORM ========== -->
+    <div id="viewOrder" class="view active relative z-10">
+        <div class="max-w-lg mx-auto px-4 py-6">
+            <div class="flex justify-end gap-1 mb-4 flex-wrap" id="langBar"></div>
+            <div class="rounded-2xl overflow-hidden mb-6 border border-dark-200">
+                <img id="bannerImg" src="" alt="Banner" class="w-full h-auto object-cover" loading="eager">
+            </div>
+            <div class="mb-6">
+                <h1 id="productTitle" class="font-display text-3xl sm:text-4xl font-black leading-tight mb-3"></h1>
+                <p id="productDesc" class="text-sm leading-relaxed" style="color:var(--muted)"></p>
+            </div>
+            <button id="btnAddToOrder" class="btn-gold w-full py-4 rounded-xl text-base flex items-center justify-center gap-3 mb-2" onclick="openVariantModal()">
+                <i class="fa-solid fa-plus"></i><span data-i18n="add_to_order"></span>
+            </button>
+            <p id="priceHint" class="text-center text-sm mb-6" style="color:var(--muted)"></p>
+
+            <div id="orderListSection" class="hidden">
+                <div class="glass rounded-2xl p-5 mb-6">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-bag-shopping text-gold-400"></i>
+                        <h2 class="font-display text-lg font-bold" data-i18n="your_order"></h2>
+                        <span id="orderCount" class="ml-auto text-sm px-2 py-0.5 rounded-full" style="color:var(--muted);background:var(--card-solid,#222)"></span>
+                    </div>
+                    <div id="orderItems" class="space-y-3 mb-4"></div>
+                    <div id="emptyOrderHint" class="text-center py-6 text-sm hidden" style="color:var(--muted)">
+                        <i class="fa-regular fa-face-meh text-2xl mb-2 block"></i>
+                        <span data-i18n="empty_order_hint"></span>
+                    </div>
+                    <div id="totalsSection" class="hidden">
+                        <div class="divider"></div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between"><span style="color:var(--muted)" data-i18n="subtotal"></span><span id="subtotalVal" class="font-semibold"></span></div>
+                            <div class="flex justify-between"><span style="color:var(--muted)" data-i18n="total_weight"></span><span id="weightVal" class="font-semibold"></span></div>
+                            <div class="flex justify-between"><span style="color:var(--muted)" data-i18n="shipping_cost"></span><span id="shippingVal" class="font-semibold"></span></div>
+                            <p id="minKgNote" class="text-xs italic" style="color:var(--muted)" data-i18n="min_1kg_note"></p>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-display text-lg font-bold" data-i18n="grand_total"></span>
+                            <span id="grandTotalVal" class="font-display text-2xl font-black text-gold-400"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="buyerForm" class="glass rounded-2xl p-5 mb-6">
+                <div class="flex items-center gap-2 mb-5">
+                    <i class="fa-solid fa-user-pen text-gold-400"></i>
+                    <h2 class="font-display text-lg font-bold" data-i18n="buyer_info"></h2>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label" data-i18n="full_name"></label>
+                        <input type="text" id="inputName" class="input-field" autocomplete="name">
+                        <p class="text-xs text-red-400 mt-1 hidden" id="errName" data-i18n="error_name"></p>
+                    </div>
+                    <div>
+                        <label class="input-label" data-i18n="phone_number"></label>
+                        <div class="phone-group">
+                            <select id="inputCountryCode" class="input-field"></select>
+                            <input type="tel" id="inputPhone" class="input-field" autocomplete="tel">
+                        </div>
+                        <p class="text-xs text-red-400 mt-1 hidden" id="errPhone" data-i18n="error_phone"></p>
+                    </div>
+                    <div>
+                        <label class="input-label"><span data-i18n="email_optional"></span></label>
+                        <input type="email" id="inputEmail" class="input-field" autocomplete="email">
+                        <p class="text-xs text-red-400 mt-1 hidden" id="errEmail" data-i18n="error_email"></p>
+                    </div>
+                    <div>
+                        <label class="input-label" data-i18n="shipping_address"></label>
+                        <textarea id="inputAddress" class="input-field" rows="1" autocomplete="street-address"></textarea>
+                        <p class="text-xs text-red-400 mt-1 hidden" id="errAddress" data-i18n="error_address"></p>
+                    </div>
+                </div>
+            </div>
+
+            <button id="btnCheckout" class="btn-gold w-full py-4 rounded-xl text-lg flex items-center justify-center gap-3 mb-8 pulse" disabled onclick="processCheckout()">
+                <i class="fa-solid fa-arrow-right"></i><span data-i18n="checkout_now"></span>
+            </button>
+            <div class="rounded-2xl overflow-hidden mb-8 border border-dark-200">
+                <img id="footerImg" src="" alt="Footer" class="w-full h-auto object-cover" loading="lazy">
+            </div>
+            <p class="text-center text-xs pb-4" style="color:var(--muted)">Nova Variety &mdash; Dropship Worldwide</p>
+        </div>
+    </div>
+
+    <!-- ========== SUCCESS PAGE ========== -->
+    <div id="viewSuccess" class="view relative z-10">
+        <div class="max-w-lg mx-auto px-4 py-8">
+            <div class="flex justify-end gap-1 mb-6 flex-wrap" id="langBarSuccess"></div>
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-900/40 border border-green-700/50 mb-4">
+                    <i class="fa-solid fa-check text-2xl text-green-400"></i>
+                </div>
+                <h1 class="font-display text-3xl font-black mb-2" data-i18n="order_success"></h1>
+                <p class="text-sm" style="color:var(--muted)" data-i18n="order_success_msg"></p>
+            </div>
+            <div class="flex justify-center mb-6">
+                <div class="img-glow rounded-2xl overflow-hidden border border-dark-200 max-w-xs w-full">
+                    <img id="successProductImg" src="" alt="Product" class="w-full h-auto object-cover">
+                </div>
+            </div>
+            <h2 id="successProductTitle" class="font-display text-xl font-bold text-center mb-6"></h2>
+            <div class="glass rounded-2xl p-5 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-xs uppercase tracking-wider" style="color:var(--muted)" data-i18n="order_id"></p>
+                        <p id="successOrderId" class="font-mono font-bold text-gold-400"></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs uppercase tracking-wider" style="color:var(--muted)" data-i18n="order_date"></p>
+                        <p id="successOrderDate" class="text-sm font-medium"></p>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div id="successItems" class="space-y-3 mb-4"></div>
+                <div class="divider"></div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between"><span style="color:var(--muted)" data-i18n="subtotal"></span><span id="successSubtotal" class="font-semibold"></span></div>
+                    <div class="flex justify-between"><span style="color:var(--muted)" data-i18n="shipping_cost"></span><span id="successShipping" class="font-semibold"></span></div>
+                </div>
+                <div class="divider"></div>
+                <div class="flex justify-between items-center">
+                    <span class="font-display text-lg font-bold" data-i18n="grand_total"></span>
+                    <span id="successGrandTotal" class="font-display text-2xl font-black text-gold-400"></span>
+                </div>
+            </div>
+            <button id="btnPayPal" class="btn-gold w-full py-4 rounded-xl text-lg flex items-center justify-center gap-3 mb-4 pulse" onclick="handlePayPal()">
+                <i class="fa-brands fa-paypal"></i><span data-i18n="pay_with_paypal"></span>
+            </button>
+            <p class="text-center text-xs mb-6" style="color:var(--muted)" data-i18n="payment_note"></p>
+            <div id="notifStatus" class="glass rounded-xl p-4 mb-6 hidden">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-envelope-circle-check text-green-400"></i>
+                    <div>
+                        <p class="text-sm font-semibold text-green-300" data-i18n="seller_notified"></p>
+                        <p class="text-xs" style="color:var(--muted)" data-i18n="check_email_spam"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <p class="text-sm mb-2" style="color:var(--muted)" data-i18n="need_help"></p>
+                <a id="waSupportLink" href="#" target="_blank" class="inline-flex items-center gap-2 text-green-400 hover:text-green-300 text-sm font-semibold transition-colors">
+                    <i class="fa-brands fa-whatsapp text-lg"></i><span data-i18n="contact_wa"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== VARIANT MODAL ========== -->
+    <div id="modalVariant" class="modal-overlay" onclick="if(event.target===this)closeVariantModal()">
+        <div class="modal-box glass rounded-2xl p-6 w-full max-w-sm mx-4">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-display text-xl font-bold" data-i18n="select_variant"></h3>
+                <button onclick="closeVariantModal()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-dark-300 transition-all" style="color:var(--muted)" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="colorSection" class="mb-5 hidden">
+                <p class="input-label" data-i18n="color"></p>
+                <div id="colorSwatches" class="flex flex-wrap gap-3"></div>
+            </div>
+            <div id="sizeSection" class="mb-5 hidden">
+                <p class="input-label" data-i18n="size"></p>
+                <div id="sizePills" class="flex flex-wrap gap-2"></div>
+            </div>
+            <div class="mb-5">
+                <p class="input-label" data-i18n="quantity"></p>
+                <div class="flex items-center gap-4">
+                    <button class="qty-btn" onclick="changeQty(-1)" id="qtyMinus"><i class="fa-solid fa-minus text-sm"></i></button>
+                    <span id="qtyDisplay" class="text-2xl font-bold w-12 text-center">1</span>
+                    <button class="qty-btn" onclick="changeQty(1)" id="qtyPlus"><i class="fa-solid fa-plus text-sm"></i></button>
+                    <span id="stockHint" class="text-xs ml-2" style="color:var(--muted)"></span>
+                </div>
+            </div>
+            <div class="rounded-xl p-3 mb-5 flex justify-between items-center" style="background:var(--card-solid,#222)">
+                <span class="text-sm" style="color:var(--muted)" data-i18n="item_price"></span>
+                <span id="variantPrice" class="font-bold text-gold-400 text-lg"></span>
+            </div>
+            <button id="btnAddVariant" class="btn-gold w-full py-3 rounded-xl text-base font-bold" onclick="addVariantToOrder()">
+                <i class="fa-solid fa-plus mr-2"></i><span data-i18n="add_to_list"></span>
+            </button>
+        </div>
+    </div>
+
+<script>
+/* ============================================================
+   KONFIGURASI — EDIT BAGIAN INI
+   ============================================================ */
+var CONFIG = {
+    APPS_SCRIPT_URL: '',
+    DEFAULT_SHEET: 'Product_1',
+    PAYPAL_ME: 'novavariety',
+    CURRENCY: 'USD',
+    CURRENCY_CODE: 'USD',
+    DEFAULT_LANG: 'en',
+    WA_SUPPORT: '6281234567890',
+    SELLER_EMAIL: 'novavariety@hotmail.com',
+    bgColor: '',
+    gtmId: '',
+    ga4Id: '',
+    product: {
+        title: 'Artisan Leather Tote Bag',
+        description: 'Handcrafted from premium full-grain leather, each bag carries its own unique character. Designed for everyday elegance with spacious interior and reinforced stitching.',
+        bannerImage: 'https://picsum.photos/seed/nv-banner-tote/800/300.jpg',
+        productImage: 'https://picsum.photos/seed/nv-prod-tote/500/500.jpg',
+        footerImage: 'https://picsum.photos/seed/nv-footer-brand/800/180.jpg',
+        weightPerUnit: 0.8,
+        shippingCostPerKg: 12,
+        skuMode: 'on'
+    },
+    variants: [
+        {sku:'LTB-BLK-S',color:'Black',colorCode:'#1A1A1A',size:'S',stock:15,hpp:25,price:59.99,weight:0.8,variantImage:''},
+        {sku:'LTB-BLK-M',color:'Black',colorCode:'#1A1A1A',size:'M',stock:20,hpp:25,price:59.99,weight:0.8,variantImage:''},
+        {sku:'LTB-BLK-L',color:'Black',colorCode:'#1A1A1A',size:'L',stock:8,hpp:27,price:64.99,weight:0.9,variantImage:''},
+        {sku:'LTB-BRN-S',color:'Brown',colorCode:'#6B3A2A',size:'S',stock:10,hpp:25,price:59.99,weight:0.8,variantImage:'https://picsum.photos/seed/nv-bag-brn/200/200.jpg'},
+        {sku:'LTB-BRN-M',color:'Brown',colorCode:'#6B3A2A',size:'M',stock:12,hpp:25,price:59.99,weight:0.8,variantImage:'https://picsum.photos/seed/nv-bag-brn/200/200.jpg'},
+        {sku:'LTB-BRN-L',color:'Brown',colorCode:'#6B3A2A',size:'L',stock:5,hpp:27,price:64.99,weight:0.9,variantImage:'https://picsum.photos/seed/nv-bag-brn/200/200.jpg'},
+        {sku:'LTB-TAN-S',color:'Tan',colorCode:'#C4A36E',size:'S',stock:8,hpp:24,price:56.99,weight:0.8,variantImage:'https://picsum.photos/seed/nv-bag-tan/200/200.jpg'},
+        {sku:'LTB-TAN-M',color:'Tan',colorCode:'#C4A36E',size:'M',stock:6,hpp:24,price:56.99,weight:0.8,variantImage:'https://picsum.photos/seed/nv-bag-tan/200/200.jpg'},
+        {sku:'LTB-TAN-L',color:'Tan',colorCode:'#C4A36E',size:'L',stock:3,hpp:26,price:61.99,weight:0.9,variantImage:'https://picsum.photos/seed/nv-bag-tan/200/200.jpg'}
+    ]
+};
+
+/* ============================================================
+   INTERNATIONALIZATION — 7 BAHASA
+   ============================================================ */
+var i18n={
+en:{add_to_order:'Add to Order',select_variant:'Select Variant',color:'Color',size:'Size',quantity:'Quantity',add_to_list:'Add to List',your_order:'Your Order',empty_order_hint:'Your order list is empty. Tap "Add to Order" above.',remove:'Remove',subtotal:'Subtotal',total_weight:'Total Weight',shipping_cost:'Shipping Cost',min_1kg_note:'Minimum shipping weight is 1 Kg',grand_total:'Grand Total',checkout_now:'Checkout Now',buyer_info:'Buyer Information',full_name:'Full Name',phone_number:'WhatsApp Number',email_optional:'Email (optional)',shipping_address:'Shipping Address',order_success:'Order Placed',order_success_msg:'Please complete payment to confirm your order.',order_id:'Order ID',order_date:'Date',pay_with_paypal:'Pay with PayPal.Me',payment_note:'You will be redirected to PayPal to complete payment.',seller_notified:'Order details sent to seller',check_email_spam:'Check your email/spam for confirmation.',need_help:'Need help?',contact_wa:'Chat on WhatsApp',error_name:'Please enter your name',error_phone:'Please enter a valid phone number',error_email:'Invalid email format',error_address:'Please enter your address',error_no_items:'Please add at least one item',error_select_variant:'Please select a variant',item_price:'Item Price',available_stock:'Stock:',pcs:'pcs',kg:'Kg',per_kg:'/Kg',no_size:'One Size',added:'Added to order',order_confirmed:'Order confirmed',sending_data:'Sending order data...',digital_product:'Digital Product',from:'from'},
+id:{add_to_order:'Tambah ke Pesanan',select_variant:'Pilih Varian',color:'Warna',size:'Ukuran',quantity:'Jumlah',add_to_list:'Tambah ke Daftar',your_order:'Pesanan Anda',empty_order_hint:'Daftar pesanan masih kosong. Tekan "Tambah ke Pesanan" di atas.',remove:'Hapus',subtotal:'Subtotal',total_weight:'Total Berat',shipping_cost:'Ongkos Kirim',min_1kg_note:'Berat kirim minimum 1 Kg',grand_total:'Total Bayar',checkout_now:'Checkout Sekarang',buyer_info:'Informasi Pembeli',full_name:'Nama Lengkap',phone_number:'Nomor WhatsApp',email_optional:'Email (opsional)',shipping_address:'Alamat Pengiriman',order_success:'Pesanan Dibuat',order_success_msg:'Silakan selesaikan pembayaran untuk mengkonfirmasi pesanan.',order_id:'ID Pesanan',order_date:'Tanggal',pay_with_paypal:'Bayar via PayPal.Me',payment_note:'Anda akan diarahkan ke PayPal untuk menyelesaikan pembayaran.',seller_notified:'Detail pesanan terkirim ke penjual',check_email_spam:'Cek email/spam Anda untuk konfirmasi.',need_help:'Butuh bantuan?',contact_wa:'Chat di WhatsApp',error_name:'Silakan masukkan nama',error_phone:'Masukkan nomor telepon valid',error_email:'Format email tidak valid',error_address:'Silakan masukkan alamat',error_no_items:'Tambahkan minimal 1 item',error_select_variant:'Silakan pilih varian',item_price:'Harga Item',available_stock:'Stok:',pcs:'pcs',kg:'Kg',per_kg:'/Kg',no_size:'Satu Ukuran',added:'Ditambahkan ke pesanan',order_confirmed:'Pesanan dikonfirmasi',sending_data:'Mengirim data pesanan...',digital_product:'Produk Digital',from:'mulai'},
+'es-mx':{add_to_order:'Agregar al Pedido',select_variant:'Seleccionar Variante',color:'Color',size:'Talla',quantity:'Cantidad',add_to_list:'Agregar',your_order:'Tu Pedido',empty_order_hint:'Tu lista esta vacia. Toca "Agregar al Pedido" arriba.',remove:'Eliminar',subtotal:'Subtotal',total_weight:'Peso Total',shipping_cost:'Costo de Envio',min_1kg_note:'Peso minimo de envio es 1 Kg',grand_total:'Total a Pagar',checkout_now:'Proceder al Pago',buyer_info:'Informacion del Comprador',full_name:'Nombre Completo',phone_number:'Numero de WhatsApp',email_optional:'Correo (opcional)',shipping_address:'Direccion de Envio',order_success:'Pedido Realizado',order_success_msg:'Completa el pago para confirmar tu pedido.',order_id:'ID del Pedido',order_date:'Fecha',pay_with_paypal:'Pagar con PayPal.Me',payment_note:'Seras redirigido a PayPal.',seller_notified:'Detalles enviados al vendedor',check_email_spam:'Revisa tu correo/spam.',need_help:'Necesitas ayuda?',contact_wa:'Chat en WhatsApp',error_name:'Ingresa tu nombre',error_phone:'Ingresa un telefono valido',error_email:'Correo invalido',error_address:'Ingresa tu direccion',error_no_items:'Agrega al menos 1 articulo',error_select_variant:'Selecciona una variante',item_price:'Precio',available_stock:'Stock:',pcs:'pzs',kg:'Kg',per_kg:'/Kg',no_size:'Talla Unica',added:'Agregado al pedido',order_confirmed:'Pedido confirmado',sending_data:'Enviando datos...',digital_product:'Producto Digital',from:'desde'},
+'pt-br':{add_to_order:'Adicionar ao Pedido',select_variant:'Selecionar Variante',color:'Cor',size:'Tamanho',quantity:'Quantidade',add_to_list:'Adicionar',your_order:'Seu Pedido',empty_order_hint:'Sua lista esta vazia. Toque "Adicionar ao Pedido" acima.',remove:'Remover',subtotal:'Subtotal',total_weight:'Peso Total',shipping_cost:'Custo de Envio',min_1kg_note:'Peso minimo de envio e 1 Kg',grand_total:'Total a Pagar',checkout_now:'Finalizar Compra',buyer_info:'Informacoes do Comprador',full_name:'Nome Completo',phone_number:'Numero de WhatsApp',email_optional:'E-mail (opcional)',shipping_address:'Endereco de Envio',order_success:'Pedido Realizado',order_success_msg:'Complete o pagamento para confirmar.',order_id:'ID do Pedido',order_date:'Data',pay_with_paypal:'Pagar com PayPal.Me',payment_note:'Voce sera redirecionado ao PayPal.',seller_notified:'Detalhes enviados ao vendedor',check_email_spam:'Verifique seu e-mail/spam.',need_help:'Precisa de ajuda?',contact_wa:'Chat no WhatsApp',error_name:'Insira seu nome',error_phone:'Insira um telefone valido',error_email:'E-mail invalido',error_address:'Insira seu endereco',error_no_items:'Adicione pelo menos 1 item',error_select_variant:'Selecione uma variante',item_price:'Preco',available_stock:'Estoque:',pcs:'un',kg:'Kg',per_kg:'/Kg',no_size:'Tamanho Unico',added:'Adicionado ao pedido',order_confirmed:'Pedido confirmado',sending_data:'Enviando dados...',digital_product:'Produto Digital',from:'a partir de'},
+it:{add_to_order:'Aggiungi all\'Ordine',select_variant:'Seleziona Variante',color:'Colore',size:'Taglia',quantity:'Quantita',add_to_list:'Aggiungi',your_order:'Il Tuo Ordine',empty_order_hint:'Lista vuota. Tocca "Aggiungi" sopra.',remove:'Rimuovi',subtotal:'Subtotale',total_weight:'Peso Totale',shipping_cost:'Costo di Spedizione',min_1kg_note:'Peso minimo di spedizione: 1 Kg',grand_total:'Totale da Pagare',checkout_now:'Procedi al Pagamento',buyer_info:'Info Acquirente',full_name:'Nome Completo',phone_number:'Numero WhatsApp',email_optional:'Email (opzionale)',shipping_address:'Indirizzo di Spedizione',order_success:'Ordine Effettuato',order_success_msg:'Completa il pagamento per confermare.',order_id:'ID Ordine',order_date:'Data',pay_with_paypal:'Paga con PayPal.Me',payment_note:'Verrai reindirizzato a PayPal.',seller_notified:'Dettagli inviati al venditore',check_email_spam:'Controlla email/spam.',need_help:'Hai bisogno di aiuto?',contact_wa:'Chat su WhatsApp',error_name:'Inserisci il nome',error_phone:'Inserisci un telefono valido',error_email:'Email non valida',error_address:'Inserisci l\'indirizzo',error_no_items:'Aggiungi almeno 1 articolo',error_select_variant:'Seleziona una variante',item_price:'Prezzo',available_stock:'Giacenza:',pcs:'pz',kg:'Kg',per_kg:'/Kg',no_size:'Taglia Unica',added:'Aggiunto all\'ordine',order_confirmed:'Ordine confermato',sending_data:'Invio dati...',digital_product:'Prodotto Digitale',from:'da'},
+es:{add_to_order:'Anadir al Pedido',select_variant:'Seleccionar Variante',color:'Color',size:'Talla',quantity:'Cantidad',add_to_list:'Anadir',your_order:'Tu Pedido',empty_order_hint:'Lista vacia. Pulsa "Anadir" arriba.',remove:'Eliminar',subtotal:'Subtotal',total_weight:'Peso Total',shipping_cost:'Gastos de Envio',min_1kg_note:'Peso minimo de envio: 1 Kg',grand_total:'Total a Pagar',checkout_now:'Tramitar Pedido',buyer_info:'Info del Comprador',full_name:'Nombre Completo',phone_number:'Numero de WhatsApp',email_optional:'Correo (opcional)',shipping_address:'Direccion de Envio',order_success:'Pedido Realizado',order_success_msg:'Completa el pago para confirmar.',order_id:'ID del Pedido',order_date:'Fecha',pay_with_paypal:'Pagar con PayPal.Me',payment_note:'Seras redirigido a PayPal.',seller_notified:'Detalles enviados al vendedor',check_email_spam:'Revisa correo/spam.',need_help:'Necesitas ayuda?',contact_wa:'Chat en WhatsApp',error_name:'Introduce tu nombre',error_phone:'Introduce un telefono valido',error_email:'Correo no valido',error_address:'Introduce tu direccion',error_no_items:'Anade al menos 1 articulo',error_select_variant:'Selecciona una variante',item_price:'Precio',available_stock:'Stock:',pcs:'uds',kg:'Kg',per_kg:'/Kg',no_size:'Talla Unica',added:'Anadido al pedido',order_confirmed:'Pedido confirmado',sending_data:'Enviando datos...',digital_product:'Producto Digital',from:'desde'},
+de:{add_to_order:'In den Warenkorb',select_variant:'Variante wahlen',color:'Farbe',size:'Grosse',quantity:'Menge',add_to_list:'Hinzufugen',your_order:'Ihre Bestellung',empty_order_hint:'Liste leer. Tippen Sie "In den Warenkorb".',remove:'Entfernen',subtotal:'Zwischensumme',total_weight:'Gesamtgewicht',shipping_cost:'Versandkosten',min_1kg_note:'Mindestversandgewicht: 1 Kg',grand_total:'Gesamtsumme',checkout_now:'Zur Kasse',buyer_info:'Kauferinformationen',full_name:'Vollstandiger Name',phone_number:'WhatsApp-Nummer',email_optional:'E-Mail (optional)',shipping_address:'Lieferadresse',order_success:'Bestellung aufgegeben',order_success_msg:'Schliessen Sie die Zahlung ab.',order_id:'Bestell-ID',order_date:'Datum',pay_with_paypal:'Mit PayPal.Me bezahlen',payment_note:'Weiterleitung zu PayPal.',seller_notified:'Details an Verkaufer gesendet',check_email_spam:'E-Mail/Spam prufen.',need_help:'Hilfe benotigt?',contact_wa:'Chat auf WhatsApp',error_name:'Name eingeben',error_phone:'Gultige Telefonnummer eingeben',error_email:'Ungultiges E-Mail-Format',error_address:'Adresse eingeben',error_no_items:'Mindestens 1 Artikel hinzufugen',error_select_variant:'Variante wahlen',item_price:'Preis',available_stock:'Bestand:',pcs:'Stk',kg:'Kg',per_kg:'/Kg',no_size:'Einheitsgrosse',added:'Hinzugefugt',order_confirmed:'Bestellung bestatigt',sending_data:'Daten werden gesendet...',digital_product:'Digitales Produkt',from:'ab'}
+};
+
+/* ============================================================
+   KODE TELEPON & LABEL BAHASA
+   ============================================================ */
+var phoneCodes=[
+    {code:'+62',flag:'ID'},{code:'+52',flag:'MX'},{code:'+55',flag:'BR'},
+    {code:'+39',flag:'IT'},{code:'+34',flag:'ES'},{code:'+49',flag:'DE'},
+    {code:'+1',flag:'US'},{code:'+44',flag:'GB'},{code:'+61',flag:'AU'},
+    {code:'+33',flag:'FR'},{code:'+81',flag:'JP'},{code:'+1',flag:'CA'}
+];
+var langLabels={en:'EN',id:'ID','es-mx':'ES-MX','pt-br':'PT-BR',it:'IT',es:'ES',de:'DE'};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+var currentLang=CONFIG.DEFAULT_LANG;
+var activeSheetName=CONFIG.DEFAULT_SHEET;
+var orderItems=[];
+var selectedColor=null,selectedSize=null,currentQty=1;
+var currentOrder=null;
+var activeProduct=JSON.parse(JSON.stringify(CONFIG.product));
+activeProduct.variants=JSON.parse(JSON.stringify(CONFIG.variants));
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function t(k){return(i18n[currentLang]&&i18n[currentLang][k])||i18n.en[k]||k}
+function formatPrice(a){try{return new Intl.NumberFormat(currentLang==='de'?'de-DE':currentLang==='id'?'id-ID':'en-US',{style:'currency',currency:CONFIG.CURRENCY_CODE,minimumFractionDigits:2,maximumFractionDigits:2}).format(a)}catch(e){return CONFIG.CURRENCY_CODE+' '+a.toFixed(2)}}
+function formatWeight(kg){return kg.toFixed(2)+' '+t('kg')}
+function generateOrderId(){var n=new Date();var d=''+n.getFullYear()+String(n.getMonth()+1).padStart(2,'0')+String(n.getDate()).padStart(2,'0');return'NV-'+d+'-'+Math.random().toString(36).substring(2,6).toUpperCase()}
+function getVariantKey(c,s){return activeProduct.skuMode==='off'?'default':(c||'-')+'|'+(s||'-')}
+function findVariant(c,s){return activeProduct.variants.find(function(v){if(activeProduct.skuMode==='off')return v;var mc=!c||v.color===c;var ms=!s||v.size===s;return mc&&ms})}
+function getAvailableStock(c,s){var v=findVariant(c,s);return v?v.stock:0}
+function getUniqueColors(){var m=new Map();activeProduct.variants.forEach(function(v){if(v.color&&!m.has(v.color))m.set(v.color,{code:v.colorCode||'#888',image:v.variantImage||''})});return m}
+function getUniqueSizes(){var s=new Set();activeProduct.variants.forEach(function(v){if(v.size)s.add(v.size)});return[...s]}
+function hasColors(){return getUniqueColors().size>0}
+function hasSizes(){return getUniqueSizes().length>0}
+function getRelativeLuminance(hex){if(!hex||hex==='')return 0;hex=hex.replace('#','');if(hex.length===3)hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];var r=parseInt(hex.substring(0,2),16)/255;var g=parseInt(hex.substring(2,4),16)/255;var b=parseInt(hex.substring(4,6),16)/255;var l=function(c){return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4)};return 0.2126*l(r)+0.7152*l(g)+0.0722*l(b)}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function showToast(msg,type){type=type||'info';var c=document.getElementById('toastContainer');var el=document.createElement('div');el.className='toast '+type;var icons={success:'fa-circle-check',error:'fa-circle-xmark',info:'fa-circle-info',warning:'fa-triangle-exclamation'};el.innerHTML='<i class="fa-solid '+(icons[type]||icons.info)+'"></i><span>'+msg+'</span>';c.appendChild(el);setTimeout(function(){el.classList.add('removing');setTimeout(function(){el.remove()},300)},3500)}
+
+/* ============================================================
+   BAHASA
+   ============================================================ */
+function setLang(lang){currentLang=lang;document.documentElement.lang=lang;document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');var txt=t(k);if(txt)el.textContent=txt});document.querySelectorAll('[data-i18n-ph]').forEach(function(el){el.placeholder=t(el.getAttribute('data-i18n-ph'))});renderLangBars();renderOrderList();renderPriceHint();if(currentOrder)renderSuccessPage()}
+function renderLangBars(){['langBar','langBarSuccess'].forEach(function(id){var bar=document.getElementById(id);if(!bar)return;bar.innerHTML='';Object.keys(langLabels).forEach(function(code){var btn=document.createElement('button');btn.className='lang-btn'+(code===currentLang?' active':'');btn.textContent=langLabels[code];btn.onclick=function(){setLang(code)};bar.appendChild(btn)})})}
+
+/* ============================================================
+   PHONE CODES
+   ============================================================ */
+function renderPhoneCodes(){var sel=document.getElementById('inputCountryCode');sel.innerHTML='';phoneCodes.forEach(function(pc){var opt=document.createElement('option');opt.value=pc.code;opt.textContent='+'+pc.code.replace('+','')+' ('+pc.flag+')';sel.appendChild(opt)})}
+
+/* ============================================================
+   TEMA
+   ============================================================ */
+function applyBgColor(color){if(!color||color==='')return;document.documentElement.style.setProperty('--bg',color);document.body.style.background=color;var lum=getRelativeLuminance(color);if(lum>0.4){document.body.classList.add('light-theme')}else{document.body.classList.remove('light-theme')}}
+
+/* ============================================================
+   ANALYTICS
+   ============================================================ */
+function injectGTM(id){if(!id)return;window.dataLayer=window.dataLayer||[];(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f)})(window,document,'script','dataLayer',id);var ns=document.createElement('noscript');ns.innerHTML='<iframe src="https://www.googletagmanager.com/ns.html?id='+id+'" height="0" width="0" style="display:none;visibility:hidden"></iframe>';document.body.prepend(ns)}
+function injectGA4(id){if(!id)return;window.dataLayer=window.dataLayer||[];var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+id;document.head.appendChild(s);window.gtag=function(){dataLayer.push(arguments)};window.gtag('js',new Date());window.gtag('config',id)}
+function trackEvent(eventName,params){if(window.dataLayer)window.dataLayer.push(Object.assign({event:eventName},params));if(window.gtag)window.gtag('event',eventName,params);if(CONFIG.APPS_SCRIPT_URL)trackToSheet(eventName,params)}
+function trackToSheet(eventName,params){try{fetch(CONFIG.APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'trackEvent',sheet:activeSheetName,event:eventName,orderId:params.transaction_id||params.order_id||'',itemsCount:params.value||0,revenue:params.revenue||params.value||0,details:JSON.stringify(params)})}).catch(function(){})}catch(e){}}
+
+/* ============================================================
+   VARIANT MODAL
+   ============================================================ */
+function openVariantModal(){selectedColor=null;selectedSize=null;currentQty=1;document.getElementById('qtyDisplay').textContent='1';var noSku=activeProduct.skuMode==='off';document.getElementById('colorSection').classList.toggle('hidden',noSku||!hasColors());document.getElementById('sizeSection').classList.toggle('hidden',noSku||!hasSizes());
+
+if(hasColors()&&!noSku){
+    var c=document.getElementById('colorSwatches');c.innerHTML='';
+    var colorMap=getUniqueColors();
+    colorMap.forEach(function(info,name){
+        var s=document.createElement('button');s.title=name;s.setAttribute('aria-label',name);s.onclick=function(){selectColor(name)};
+        if(info.image){s.className='swatch';s.innerHTML='<img src="'+info.image+'" alt="'+name+'" loading="lazy" onerror="this.parentNode.className=\'swatch swatch-circle\';this.parentNode.style.background=\''+info.code+'\';this.remove()">'}
+        else{s.className='swatch swatch-circle';s.style.background=info.code}
+        c.appendChild(s);
+    });
+}
+if(hasSizes()&&!noSku){var c2=document.getElementById('sizePills');c2.innerHTML='';getUniqueSizes().forEach(function(size){var p=document.createElement('button');p.className='size-pill';p.textContent=size;p.onclick=function(){selectSize(size)};c2.appendChild(p)})}
+updateVariantPrice();updateStockHint();document.getElementById('modalVariant').classList.add('open');document.body.style.overflow='hidden'}
+
+function closeVariantModal(){document.getElementById('modalVariant').classList.remove('open');document.body.style.overflow=''}
+function selectColor(name){selectedColor=name;document.querySelectorAll('#colorSwatches .swatch').forEach(function(s){s.classList.toggle('selected',s.title===name)});if(selectedSize){var st=getAvailableStock(selectedColor,selectedSize);if(st<=0){selectedSize=null;document.querySelectorAll('.size-pill').forEach(function(p){p.classList.remove('selected')})}}updateVariantPrice();updateStockHint()}
+function selectSize(size){selectedSize=size;document.querySelectorAll('.size-pill').forEach(function(p){p.classList.toggle('selected',p.textContent===size)});updateVariantPrice();updateStockHint()}
+function changeQty(d){var noSku=activeProduct.skuMode==='off';var maxSt=noSku?999:getAvailableStock(selectedColor,selectedSize);var ek=getVariantKey(selectedColor,selectedSize);var eq=orderItems.filter(function(i){return i.key===ek}).reduce(function(s,i){return s+i.qty},0);var avail=Math.max(0,maxSt-eq);currentQty=Math.max(1,Math.min(currentQty+d,avail));document.getElementById('qtyDisplay').textContent=currentQty;updateVariantPrice()}
+function updateVariantPrice(){var noSku=activeProduct.skuMode==='off';var price=0;if(noSku){price=activeProduct.variants.length>0?activeProduct.variants[0].price:0}else{var v=findVariant(selectedColor,selectedSize);price=v?v.price:0}document.getElementById('variantPrice').textContent=formatPrice(price*currentQty)}
+function updateStockHint(){var noSku=activeProduct.skuMode==='off';if(noSku){document.getElementById('stockHint').textContent='';return}var st=getAvailableStock(selectedColor,selectedSize);var ek=getVariantKey(selectedColor,selectedSize);var eq=orderItems.filter(function(i){return i.key===ek}).reduce(function(s,i){return s+i.qty},0);var avail=Math.max(0,st-eq);document.getElementById('stockHint').textContent=t('available_stock')+' '+avail+' '+t('pcs')}
+
+function addVariantToOrder(){var noSku=activeProduct.skuMode==='off';if(!noSku){if(hasColors()&&!selectedColor){showToast(t('error_select_variant'),'warning');return}if(hasSizes()&&!selectedSize){showToast(t('error_select_variant'),'warning');return}}var v=findVariant(selectedColor,selectedSize);if(!v&&!noSku){showToast(t('error_select_variant'),'error');return}var key=getVariantKey(selectedColor,selectedSize);var price=noSku?(activeProduct.variants[0]?activeProduct.variants[0].price:0):v.price;var weight=noSku?0:(v.weight||activeProduct.weightPerUnit);var sku=noSku?'':v.sku;var color=noSku?'':(selectedColor||v.color||'');var colorCode=noSku?'':(v.colorCode||'');var size=noSku?'':(selectedSize||v.size||'');var existing=orderItems.find(function(i){return i.key===key});if(existing){var ms=noSku?999:v.stock;existing.qty=Math.min(existing.qty+currentQty,ms)}else{orderItems.push({key:key,sku:sku,color:color,colorCode:colorCode,size:size,qty:currentQty,unitPrice:price,weight:weight})}closeVariantModal();renderOrderList();showToast(t('added'),'success');var label=noSku?t('digital_product'):([color,size].filter(Boolean).join(' / '));trackEvent('add_to_cart',{item_name:label,value:price,currency:CONFIG.CURRENCY_CODE})}
+
+/* ============================================================
+   ORDER LIST
+   ============================================================ */
+function renderOrderList(){var sec=document.getElementById('orderListSection');var con=document.getElementById('orderItems');var empty=document.getElementById('emptyOrderHint');var tot=document.getElementById('totalsSection');var badge=document.getElementById('orderCount');var btn=document.getElementById('btnCheckout');if(orderItems.length===0){sec.classList.add('hidden');btn.disabled=true;btn.classList.remove('pulse');return}sec.classList.remove('hidden');btn.disabled=false;btn.classList.add('pulse');badge.textContent=orderItems.reduce(function(s,i){return s+i.qty},0)+' '+t('pcs');con.innerHTML='';orderItems.forEach(function(item,idx){var div=document.createElement('div');div.className='order-item flex items-center gap-3 rounded-xl p-3';div.style.background='var(--card-solid,#222)';var dot='';if(item.colorCode){dot='<div class="w-8 h-8 rounded-full flex-shrink-0 border" style="background:'+item.colorCode+';border-color:var(--border)"></div>'}else if(activeProduct.skuMode==='off'){dot='<div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center" style="background:var(--card-solid,#222)"><i class="fa-solid fa-file-lines text-xs" style="color:var(--muted)"></i></div>'}var label='';if(activeProduct.skuMode==='off'){label='<span class="text-sm font-semibold">'+t('digital_product')+'</span>'}else{var p=[];if(item.color)p.push(item.color);if(item.size)p.push(item.size);label='<span class="text-sm font-semibold">'+p.join(' / ')+'</span>'}div.innerHTML=dot+'<div class="flex-1 min-w-0">'+label+'<p class="text-xs" style="color:var(--muted)">'+item.qty+' x '+formatPrice(item.unitPrice)+'</p></div><span class="text-sm font-bold text-gold-400 flex-shrink-0">'+formatPrice(item.qty*item.unitPrice)+'</span><button onclick="removeOrderItem('+idx+')" class="w-7 h-7 rounded-full flex items-center justify-center hover:text-red-400 hover:bg-red-400/10 transition-all flex-shrink-0" style="color:var(--muted)" aria-label="'+t('remove')+'"><i class="fa-solid fa-xmark text-xs"></i></button>';con.appendChild(div)});var subtotal=orderItems.reduce(function(s,i){return s+i.qty*i.unitPrice},0);var totalWeight=orderItems.reduce(function(s,i){return s+i.qty*i.weight},0);var shipW=totalWeight>0?Math.max(1,Math.ceil(totalWeight)):0;var shipC=shipW*activeProduct.shippingCostPerKg;var grand=subtotal+shipC;document.getElementById('subtotalVal').textContent=formatPrice(subtotal);document.getElementById('weightVal').textContent=formatWeight(totalWeight);document.getElementById('shippingVal').textContent=shipC>0?formatPrice(shipC)+' ('+shipW+' '+t('kg')+' '+t('per_kg')+')':'—';document.getElementById('grandTotalVal').textContent=formatPrice(grand);document.getElementById('minKgNote').textContent=totalWeight<1&&totalWeight>0?t('min_1kg_note'):'';tot.classList.remove('hidden');empty.classList.add('hidden')}
+
+function removeOrderItem(idx){var el=document.querySelectorAll('.order-item')[idx];if(el){el.classList.add('removing');setTimeout(function(){orderItems.splice(idx,1);renderOrderList()},300)}else{orderItems.splice(idx,1);renderOrderList()}}
+function renderPriceHint(){var noSku=activeProduct.skuMode==='off';if(noSku){var p=activeProduct.variants.length>0?activeProduct.variants[0].price:0;document.getElementById('priceHint').textContent=formatPrice(p)}else{var prices=activeProduct.variants.map(function(v){return v.price});var mn=Math.min.apply(null,prices);var mx=Math.max.apply(null,prices);document.getElementById('priceHint').textContent=mn===mx?formatPrice(mn):t('from')+' '+formatPrice(mn)}}
+
+/* ============================================================
+   CHECKOUT & VALIDATION
+   ============================================================ */
+function clearErrors(){['errName','errPhone','errEmail','errAddress'].forEach(function(id){document.getElementById(id).classList.add('hidden')});['inputName','inputPhone','inputEmail','inputAddress'].forEach(function(id){document.getElementById(id).classList.remove('error')})}
+function showErr(iid,eid){document.getElementById(iid).classList.add('error');document.getElementById(eid).classList.remove('hidden')}
+function validateForm(){clearErrors();var ok=true;var name=document.getElementById('inputName').value.trim();var phone=document.getElementById('inputPhone').value.trim();var email=document.getElementById('inputEmail').value.trim();var address=document.getElementById('inputAddress').value.trim();if(!name){showErr('inputName','errName');ok=false}if(!phone||phone.length<6){showErr('inputPhone','errPhone');ok=false}if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('inputEmail','errEmail');ok=false}if(!address||address.length<5){showErr('inputAddress','errAddress');ok=false}if(orderItems.length===0){showToast(t('error_no_items'),'error');ok=false}return ok}
+
+function processCheckout(){if(!validateForm())return;var phoneCode=document.getElementById('inputCountryCode').value;var countryMatch=phoneCodes.find(function(pc){return pc.code===phoneCode});var buyerCountry=countryMatch?countryMatch.flag:'unknown';var subtotal=orderItems.reduce(function(s,i){return s+i.qty*i.unitPrice},0);var totalWeight=orderItems.reduce(function(s,i){return s+i.qty*i.weight},0);var shipW=totalWeight>0?Math.max(1,Math.ceil(totalWeight)):0;var shipC=shipW*activeProduct.shippingCostPerKg;var grand=subtotal+shipC;currentOrder={orderId:generateOrderId(),date:new Date().toISOString(),buyer:{name:document.getElementById('inputName').value.trim(),phone:phoneCode+' '+document.getElementById('inputPhone').value.trim(),email:document.getElementById('inputEmail').value.trim(),country:buyerCountry,address:document.getElementById('inputAddress').value.trim()},items:JSON.parse(JSON.stringify(orderItems)),subtotal:subtotal,totalWeight:totalWeight,shippingWeight:shipW,shippingCost:shipC,grandTotal:grand};try{localStorage.setItem('nv_last_order',JSON.stringify(currentOrder))}catch(e){}if(CONFIG.APPS_SCRIPT_URL){saveToSheet(currentOrder,false).catch(function(){})}trackEvent('begin_checkout',{value:grand,currency:CONFIG.CURRENCY_CODE,items:orderItems.length});renderSuccessPage();switchView('viewSuccess');showToast(t('order_confirmed'),'success')}
+
+/* ============================================================
+   SUCCESS PAGE
+   ============================================================ */
+function renderSuccessPage(){if(!currentOrder)return;document.getElementById('successProductImg').src=activeProduct.productImage;document.getElementById('successProductTitle').textContent=activeProduct.title;document.getElementById('successOrderId').textContent=currentOrder.orderId;document.getElementById('successOrderDate').textContent=new Date(currentOrder.date).toLocaleDateString(currentLang==='de'?'de-DE':currentLang==='id'?'id-ID':'en-US',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});var con=document.getElementById('successItems');con.innerHTML='';currentOrder.items.forEach(function(item){var div=document.createElement('div');div.className='flex items-center justify-between text-sm';var label=activeProduct.skuMode==='off'?t('digital_product'):[item.color,item.size].filter(Boolean).join(' / ');div.innerHTML='<div><span class="font-medium">'+label+'</span><span class="ml-2" style="color:var(--muted)">x'+item.qty+'</span></div><span class="font-semibold">'+formatPrice(item.qty*item.unitPrice)+'</span>';con.appendChild(div)});document.getElementById('successSubtotal').textContent=formatPrice(currentOrder.subtotal);document.getElementById('successShipping').textContent=currentOrder.shippingCost>0?formatPrice(currentOrder.shippingCost):'—';document.getElementById('successGrandTotal').textContent=formatPrice(currentOrder.grandTotal);var waMsg=encodeURIComponent('Halo, saya ingin menanyakan pesanan '+currentOrder.orderId);document.getElementById('waSupportLink').href='https://wa.me/'+CONFIG.WA_SUPPORT+'?text='+waMsg;document.getElementById('notifStatus').classList.add('hidden')}
+
+/* ============================================================
+   PAYPAL & NOTIFIKASI
+   ============================================================ */
+function handlePayPal(){if(!currentOrder)return;var amount=currentOrder.grandTotal.toFixed(2);var paypalUrl='https://paypal.me/'+CONFIG.PAYPAL_ME+'/'+amount+'?currency='+CONFIG.CURRENCY_CODE;showToast(t('sending_data'),'info');var saved=false;if(CONFIG.APPS_SCRIPT_URL){saveToSheet(currentOrder,true).then(function(){saved=true;window.open(paypalUrl,'_blank');document.getElementById('notifStatus').classList.remove('hidden')}).catch(function(){sendEmailFallback(currentOrder);sendBuyerNotif(currentOrder);window.open(paypalUrl,'_blank');document.getElementById('notifStatus').classList.remove('hidden')})}else{sendEmailFallback(currentOrder);sendBuyerNotif(currentOrder);setTimeout(function(){window.open(paypalUrl,'_blank');document.getElementById('notifStatus').classList.remove('hidden')},600)}trackEvent('purchase',{transaction_id:currentOrder.orderId,value:currentOrder.grandTotal,currency:CONFIG.CURRENCY_CODE,items:currentOrder.items.length})}
+
+function sendEmailFallback(order){var body='=== NEW ORDER ===\nOrder ID: '+order.orderId+'\nDate: '+new Date(order.date).toLocaleString()+'\n\n=== BUYER ===\nName: '+order.buyer.name+'\nPhone: '+order.buyer.phone+'\nEmail: '+(order.buyer.email||'-')+'\nCountry: '+order.buyer.country+'\nAddress: '+order.buyer.address+'\n\n=== ITEMS ===\n';order.items.forEach(function(item,i){var label=activeProduct.skuMode==='off'?'Digital Product':[item.color,item.size].filter(Boolean).join(' / ');if(item.sku)label+=' ('+item.sku+')';body+=(i+1)+'. '+label+' x'+item.qty+' = '+formatPrice(item.qty*item.unitPrice)+'\n'});body+='\nSubtotal: '+formatPrice(order.subtotal)+'\nShipping: '+formatPrice(order.shippingCost)+'\nTOTAL: '+formatPrice(order.grandTotal)+'\n\nPayment: PayPal.Me';var subj='New Order '+order.orderId+' - '+activeProduct.title;window.open('mailto:'+CONFIG.SELLER_EMAIL+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body),'_blank')}
+function sendBuyerNotif(order){if(!order.buyer.phone)return;var phone=order.buyer.phone.replace(/[^0-9]/g,'');if(phone.length>=8){var msg='Thank you for your order!\n\nOrder ID: '+order.orderId+'\nTotal: '+formatPrice(order.grandTotal)+'\n\nPlease complete payment via PayPal.Me to confirm.';window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg),'_blank')}}
+
+/* ============================================================
+   GOOGLE SHEETS
+   ============================================================ */
+function loadFromSheet(){if(!CONFIG.APPS_SCRIPT_URL)return Promise.resolve();return fetch(CONFIG.APPS_SCRIPT_URL+'?action=read&sheet='+encodeURIComponent(activeSheetName)).then(function(res){if(!res.ok)throw new Error('HTTP '+res.status);return res.json()}).then(function(data){if(data.success&&data.product){var p=data.product;activeProduct.skuMode=p.skuMode||'on';activeProduct.weightPerUnit=Number(p.weightPerUnit)||0.8;activeProduct.shippingCostPerKg=Number(p.shippingCostPerKg)||12;activeProduct.title=p.name||activeProduct.title;activeProduct.description=p.description||activeProduct.description;activeProduct.bannerImage=p.bannerImage||activeProduct.bannerImage;activeProduct.productImage=p.productImage||activeProduct.productImage;activeProduct.footerImage=p.footerImage||activeProduct.footerImage;activeProduct.variants=data.variants||activeProduct.variants;if(p.bgColor)applyBgColor(p.bgColor);if(p.gtmId)injectGTM(p.gtmId);if(p.ga4Id)injectGA4(p.ga4Id);if(p.currency){CONFIG.CURRENCY=p.currency;CONFIG.CURRENCY_CODE=p.currency}if(activeProduct.skuMode==='off'&&activeProduct.variants.length===0){activeProduct.variants=[{sku:'',color:'',colorCode:'',size:'',stock:999,hpp:0,price:Number(p.sellingPrice)||0,weight:0,variantImage:''}]}document.getElementById('bannerImg').src=activeProduct.bannerImage;document.getElementById('footerImg').src=activeProduct.footerImage;document.getElementById('productTitle').textContent=activeProduct.title;document.getElementById('productDesc').textContent=activeProduct.description;renderPriceHint();showToast('Product loaded','success')}}).catch(function(e){console.warn('Sheet load failed, using fallback:',e)})}
+
+function saveToSheet(order,sendEmails){return fetch(CONFIG.APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:sendEmails?'saveAndNotify':'save',sheet:activeSheetName,order:order,sellerEmail:CONFIG.SELLER_EMAIL,productTitle:activeProduct.title})}).then(function(res){if(!res.ok)throw new Error('HTTP '+res.status);return res.json()}).then(function(data){if(!data.success)throw new Error(data.error||'Error');return data})}
+
+/* ============================================================
+   VIEW SWITCHING
+   ============================================================ */
+function switchView(id){document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+
+/* ============================================================
+   TEXTAREA AUTO-RESIZE
+   ============================================================ */
+function initTextarea(){var ta=document.getElementById('inputAddress');ta.addEventListener('input',function(){this.style.height='auto';this.style.height=this.scrollHeight+'px'})}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init(){
+    var params=new URLSearchParams(window.location.search);
+    if(params.get('sheet'))activeSheetName=decodeURIComponent(params.get('sheet'));
+    if(params.get('lang'))currentLang=params.get('lang');
+
+    document.getElementById('bannerImg').src=activeProduct.bannerImage;
+    document.getElementById('footerImg').src=activeProduct.footerImage;
+    document.getElementById('productTitle').textContent=activeProduct.title;
+    document.getElementById('productDesc').textContent=activeProduct.description;
+
+    renderLangBars();renderPhoneCodes();renderPriceHint();initTextarea();
+
+    document.getElementById('inputName').setAttribute('data-i18n-ph','full_name');
+    document.getElementById('inputPhone').setAttribute('data-i18n-ph','phone_number');
+    document.getElementById('inputEmail').setAttribute('data-i18n-ph','email_optional');
+    document.getElementById('inputAddress').setAttribute('data-i18n-ph','shipping_address');
+
+    setLang(currentLang);
+
+    if(!params.get('lang')){var bl=navigator.language||'';var map={'id':'id','en':'en','es-MX':'es-mx','pt-BR':'pt-br','it':'it','es':'es','de':'de'};var m=map[bl]||map[bl.substring(0,2)];if(m)setLang(m)}
+
+    if(CONFIG.bgColor)applyBgColor(CONFIG.bgColor);
+    if(CONFIG.gtmId)injectGTM(CONFIG.gtmId);
+    if(CONFIG.ga4Id)injectGA4(CONFIG.ga4Id);
+
+    if(CONFIG.APPS_SCRIPT_URL){loadFromSheet()}
+
+    trackEvent('page_view',{page_title:activeProduct.title,page_location:window.location.href});
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
