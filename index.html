@@ -323,7 +323,11 @@ function getUniqueSizes(){var s=new Set();activeProduct.variants.forEach(functio
 function hasColors(){return getUniqueColors().size>0}
 function hasSizes(){return getUniqueSizes().length>0}
 function getRelativeLuminance(hex){if(!hex)return 0;hex=hex.replace('#','');if(hex.length===3)hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];var r=parseInt(hex.substring(0,2),16)/255,g=parseInt(hex.substring(2,4),16)/255,b=parseInt(hex.substring(4,6),16)/255;var l=function(c){return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4)};return 0.2126*l(r)+0.7152*l(g)+0.0722*l(b)}
-
+function variantImg(url){
+    if(!url)return'';
+    url=url.split('?')[0];
+    return'https://wsrv.nl/?url='+encodeURIComponent(url)+'&w=120&q=75&output=webp';
+}
 function imgC(url,maxW,quality){
     if(!url||url===''||url.indexOf('data:')===0)return url;
     if(!CONFIG.COMPRESS_IMAGES)return url;
@@ -374,7 +378,7 @@ function openVariantModal(){
             if(info.image){
                 s.className='swatch';
                 var img=document.createElement('img');
-                img.src=info.image;
+               img.src=variantImg(info.image);
                 img.alt=name;
                 img.loading='lazy';
                 img.referrerPolicy='no-referrer';
