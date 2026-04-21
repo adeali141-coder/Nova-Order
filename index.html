@@ -9,24 +9,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg:#111111;--surface:#1a1a1c;--card:#222225;--accent:#c9953c;
-            --accent-h:#daa84f;--accent-glow:rgba(201,149,60,0.18);
-            --fg:#f0ebe3;--muted:#8a8580;--border:#2e2e32;--border-h:#444;
+            --bg:#111111;--surface:#1a1a1c;--card:#222225;
+            --fg:#f0ebe3;--muted:rgba(240,235,227,.5);--border:rgba(255,255,255,.07);--border-h:rgba(255,255,255,.12);
+            --btn:#2d6a4f;--btn-h:#357a5e;--btn-text:#ffffff;
             --success:#34d399;--error:#f87171;
         }
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden}
         h1,h2,h3{font-family:'Playfair Display',serif}
         body::before{content:'';position:fixed;inset:-50%;width:200%;height:200%;
-            background:radial-gradient(ellipse at 20% 50%,rgba(201,149,60,.03)0%,transparent 50%),
-                        radial-gradient(ellipse at 80% 20%,rgba(201,149,60,.02)0%,transparent 50%);
+            background:radial-gradient(ellipse at 20% 50%,rgba(45,106,79,.03)0%,transparent 50%),
+                        radial-gradient(ellipse at 80% 20%,rgba(45,106,79,.02)0%,transparent 50%);
             animation:bgF 20s ease-in-out infinite alternate;pointer-events:none;z-index:-1}
         @keyframes bgF{0%{transform:translate(0,0)}100%{transform:translate(-3%,2%)}}
 
         #loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .5s}
         #loader.hide{opacity:0;pointer-events:none}
         .ld-grid{display:grid;grid-template-columns:repeat(3,12px);gap:8px}
-        .ld-grid span{width:12px;height:12px;border-radius:3px;background:var(--accent);opacity:.15;animation:ldP 1.2s ease-in-out infinite}
+        .ld-grid span{width:12px;height:12px;border-radius:3px;background:var(--btn);opacity:.15;animation:ldP 1.2s ease-in-out infinite}
         .ld-grid span:nth-child(1){animation-delay:0s}.ld-grid span:nth-child(2){animation-delay:.1s}
         .ld-grid span:nth-child(3){animation-delay:.2s}.ld-grid span:nth-child(4){animation-delay:.3s}
         .ld-grid span:nth-child(5){animation-delay:.4s}.ld-grid span:nth-child(6){animation-delay:.5s}
@@ -38,28 +38,29 @@
         #banner img{width:100%;height:auto;display:block}
         .banner-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(17,17,17,.5) 30%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
 
-        .variant-card{background:var(--card);border:2px solid var(--border);border-radius:16px;overflow:hidden;
+        /* Variant Cards */
+        .variant-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
             transition:all .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
-        .variant-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.25);border-color:var(--border-h)}
-        .variant-card.selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 8px 32px var(--accent-glow)}
+        .variant-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.2);border-color:var(--border-h)}
+        .variant-card.selected{border-color:var(--btn);box-shadow:0 0 0 1px var(--btn),0 6px 24px rgba(45,106,79,.15)}
         .variant-card.clickable{cursor:pointer}
 
         .card-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px}
-        .clr-sw{width:18px;height:18px;border-radius:50%;border:2px solid rgba(128,128,128,.25);flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+        .clr-sw{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border-h);flex-shrink:0}
         .clr-nm{font-weight:600;font-size:13px;margin-left:7px;color:var(--fg)}
         .card-pr{font-weight:700;font-size:13px;color:var(--fg)}
 
         .card-img{padding:0 12px}
-        .card-img img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;background:var(--surface);display:block}
+        .card-img img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;background:var(--surface);display:block}
 
         .card-sizes{display:flex;flex-wrap:wrap;gap:5px;padding:10px 12px 8px}
         .sz-pill{display:flex;flex-direction:column;align-items:center;padding:6px 10px;border-radius:8px;
-            border:1.5px solid var(--border);background:var(--surface);color:var(--fg);min-width:44px;
+            border:1px solid var(--border);background:var(--surface);color:var(--fg);min-width:44px;
             transition:all .2s ease;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px}
-        .sz-pill:hover:not(:disabled):not(.sel){border-color:var(--border-h);background:var(--surface)}
-        .sz-pill.sel{background:var(--fg);border-color:var(--fg);font-weight:600;
-            box-shadow:0 3px 12px rgba(0,0,0,.2);transform:scale(1.05)}
-        .sz-pill.sel .sz-stk{opacity:.6}
+        .sz-pill:hover:not(:disabled):not(.sel){border-color:var(--border-h)}
+        .sz-pill.sel{background:var(--btn);border-color:var(--btn);color:var(--btn-text);font-weight:600;
+            box-shadow:0 3px 10px rgba(45,106,79,.2);transform:scale(1.05)}
+        .sz-pill.sel .sz-stk{color:rgba(255,255,255,.6)}
         .sz-pill.oos{opacity:.25;cursor:not-allowed;pointer-events:none}
         .sz-pill.oos .sz-lbl{text-decoration:line-through}
         .sz-stk{font-size:9px;color:var(--muted);margin-top:1px}
@@ -68,14 +69,14 @@
 
         .card-actions{display:flex;align-items:center;gap:6px;padding:8px 12px 12px;border-top:1px solid var(--border);margin-top:auto}
         .c-qty-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--surface);
-            border:1.5px solid var(--border);border-radius:8px;color:var(--fg);cursor:pointer;transition:all .2s;font-size:15px;font-weight:600;flex-shrink:0}
+            border:1px solid var(--border);border-radius:8px;color:var(--fg);cursor:pointer;transition:all .2s;font-size:15px;font-weight:600;flex-shrink:0}
         .c-qty-btn:hover{border-color:var(--border-h)}
-        .c-qty-in{width:38px;height:30px;text-align:center;background:var(--surface);border:1.5px solid var(--border);
+        .c-qty-in{width:38px;height:30px;text-align:center;background:var(--surface);border:1px solid var(--border);
             border-radius:8px;color:var(--fg);font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;outline:none;flex-shrink:0}
         .c-qty-in:focus{border-color:var(--border-h)}
-        .c-add{flex:1;padding:7px 10px;background:var(--fg);font-size:12px;font-weight:700;
+        .c-add{flex:1;padding:7px 10px;background:var(--btn);color:var(--btn-text);font-size:12px;font-weight:700;
             border:none;border-radius:8px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
-        .c-add:hover{opacity:.85}
+        .c-add:hover{background:var(--btn-h)}
         .c-add:active{transform:scale(.97)}
         .c-add:disabled{opacity:.3;cursor:not-allowed;transform:none}
 
@@ -83,21 +84,22 @@
 
         @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
         .shake{animation:shake .35s ease}
-        @keyframes addedPulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}70%{box-shadow:0 0 0 8px rgba(52,211,153,0)}100%{box-shadow:none}}
+        @keyframes addedPulse{0%{box-shadow:0 0 0 0 rgba(45,106,79,.4)}70%{box-shadow:0 0 0 8px rgba(45,106,79,0)}100%{box-shadow:none}}
         .card-added{animation:addedPulse .5s ease}
         @keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
         .cart-enter{animation:slideIn .25s ease}
 
-        .order-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
-        .fi{width:100%;padding:9px 11px;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;
+        /* Order / Form */
+        .order-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+        .fi{width:100%;padding:9px 11px;background:var(--surface);border:1px solid var(--border);border-radius:8px;
             color:var(--fg);font-size:13px;font-family:'DM Sans',sans-serif;transition:border-color .2s;outline:none}
         .fi:focus{border-color:var(--border-h)}
         .fi::placeholder{color:var(--muted)}
         .fl{display:block;font-size:10px;font-weight:500;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
 
-        .btn-p{width:100%;padding:12px 20px;background:var(--fg);font-size:14px;font-weight:700;
-            border:none;border-radius:11px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
-        .btn-p:hover{opacity:.85;transform:translateY(-1px)}
+        .btn-p{width:100%;padding:12px 20px;background:var(--btn);color:var(--btn-text);font-size:14px;font-weight:700;
+            border:none;border-radius:10px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+        .btn-p:hover{background:var(--btn-h);transform:translateY(-1px)}
         .btn-p:active{transform:scale(.98)}
         .btn-p:disabled{opacity:.35;cursor:not-allowed;transform:none}
 
@@ -153,18 +155,17 @@
         <div id="err-detail" class="err-box hidden"><code id="err-code"></code></div>
         <div class="flex gap-2 justify-center mt-4 flex-wrap">
             <button onclick="location.reload()" class="btn-p" style="width:auto;padding:10px 24px;font-size:13px"><i class="fas fa-redo mr-1"></i>Retry</button>
-            <button onclick="testConnection()" class="btn-p" style="width:auto;padding:10px 24px;font-size:13px;background:transparent;color:var(--fg);border:1.5px solid var(--border)"><i class="fas fa-stethoscope mr-1"></i>Diagnose</button>
+            <button onclick="testConnection()" class="btn-p" style="width:auto;padding:10px 24px;font-size:13px;background:transparent;color:var(--fg);border:1px solid var(--border)"><i class="fas fa-stethoscope mr-1"></i>Diagnose</button>
         </div>
         <div id="diag-result" class="err-box hidden mt-3 text-left"></div>
     </div>
 </div>
 
 <div id="app" class="hidden">
-
     <header id="banner">
         <img id="banner-img" src="" alt="Banner">
         <div class="banner-ov">
-            <span id="cat-badge" class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold mb-1" style="background:var(--fg);letter-spacing:.5px;width:fit-content"></span>
+            <span id="cat-badge" class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold mb-1" style="background:var(--btn);color:var(--btn-text);letter-spacing:.5px;width:fit-content"></span>
             <h1 id="prod-name" class="text-2xl sm:text-3xl font-black leading-tight"></h1>
         </div>
     </header>
@@ -195,9 +196,9 @@
                         </div>
                         <div id="cart-items" class="space-y-2 hidden"></div>
                         <div id="cart-totals" class="hidden mt-3 pt-3" style="border-top:1px solid var(--border)">
-                            <div class="flex justify-between text-xs mb-1"><span style="color:var(--muted)">Subtotal</span><span id="t-sub"></span></div>
-                            <div class="flex justify-between text-xs mb-2"><span style="color:var(--muted)">Shipping</span><span id="t-ship"></span></div>
-                            <div class="flex justify-between font-bold text-base pt-2" style="border-top:1px solid var(--border)"><span>Total</span><span id="t-total"></span></div>
+                            <div class="flex justify-between text-xs mb-1"><span style="color:var(--muted)">Subtotal</span><span id="t-sub" style="color:var(--fg)"></span></div>
+                            <div class="flex justify-between text-xs mb-2"><span style="color:var(--muted)">Shipping</span><span id="t-ship" style="color:var(--fg)"></span></div>
+                            <div class="flex justify-between font-bold text-base pt-2" style="border-top:1px solid var(--border)"><span style="color:var(--fg)">Total</span><span id="t-total" style="color:var(--fg);font-size:17px"></span></div>
                         </div>
                     </div>
                     <div class="order-card">
@@ -216,7 +217,7 @@
                     <button class="btn-p" id="submit-btn" disabled style="padding:13px;font-size:14px">
                         <i class="fas fa-lock mr-1.5" style="font-size:12px"></i>Place Order
                     </button>
-                    <p class="text-center" style="font-size:10px;color:var(--muted);opacity:.4"><i class="fas fa-shield-alt mr-1"></i>Secure checkout via PayPal</p>
+                    <p class="text-center" style="font-size:10px;color:var(--muted);opacity:.6"><i class="fas fa-shield-alt mr-1"></i>Secure checkout via PayPal</p>
                 </div>
             </div>
         </div>
@@ -224,7 +225,6 @@
     <div id="footer-section" class="hidden"><img id="footer-img" src="" alt="" style="width:100%;max-height:120px;object-fit:cover;opacity:.4"></div>
 </div>
 
-<!-- ===== SUCCESS MODAL — slide up dari bawah ===== -->
 <div id="success-modal" class="modal-ov">
     <div class="modal-ct">
         <div class="text-center">
@@ -234,9 +234,7 @@
             <h2 class="text-lg font-bold mb-1" style="color:var(--fg)">Order Placed!</h2>
             <p id="modal-oid" class="text-xs mb-4" style="color:var(--muted)"></p>
         </div>
-
-        <!-- Detail Order -->
-        <div id="modal-details" style="background:var(--surface);border-radius:12px;padding:14px;margin-bottom:14px">
+        <div id="modal-details" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
             <p id="modal-product" class="text-xs font-bold mb-2" style="color:var(--fg)"></p>
             <div id="modal-items" class="space-y-1.5 mb-3"></div>
             <div style="border-top:1px solid var(--border);padding-top:8px">
@@ -245,13 +243,9 @@
                 <div class="flex justify-between font-bold" style="color:var(--fg)"><span>Total</span><span id="modal-total" style="font-size:16px"></span></div>
             </div>
         </div>
-
-        <!-- Tombol Pay Now -->
         <button class="btn-p" id="modal-pay" style="padding:14px;font-size:15px;margin-bottom:10px">
             <i class="fab fa-paypal mr-2"></i>Pay Now
         </button>
-
-        <!-- Support -->
         <div style="text-align:center;padding:10px 0;border-top:1px solid var(--border)">
             <p class="text-xs" style="color:var(--muted);margin-bottom:6px">Need help? Contact us:</p>
             <a href="mailto:novavariety@hotmail.com" class="text-xs" style="color:var(--fg);text-decoration:none;display:block;margin-bottom:3px">
@@ -261,9 +255,7 @@
                 <i class="fab fa-whatsapp" style="font-size:11px;margin-right:4px"></i>+62 851-6199-0373
             </a>
         </div>
-
-        <!-- Close -->
-        <button id="modal-close" style="width:100%;padding:10px;background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif">
+        <button id="modal-close" style="width:100%;padding:10px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;border-radius:8px">
             Close
         </button>
     </div>
@@ -273,8 +265,6 @@
 
 <script>
 const CFG = {
-    // GANTI dengan PayPal.me link kamu, format: https://paypal.me/username
-    // Jumlah otomatis ditambahkan oleh kode
     PAYPAL_ME: 'https://paypal.me/novavariety',
     SELLER_EMAIL: 'novavariety@hotmail.com',
     SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzpj6MdFIKB3NviKkZ-AQhkEUKY_Utxdga6COXsyPadqBOUZdnXhZ-lMCEzvYN630UyQg/exec'
@@ -338,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function cardMax(card) { const s = parseInt(card.dataset.selStock); return (s && s > 0) ? s : 999; }
 
 // =============================================
-// Warna — semuanya turun dari cardText
+// Warna helpers
 // =============================================
 function hexToRgba(hex, a) {
     if (!hex || hex.length < 4) return '';
@@ -366,29 +356,6 @@ function applyCardBg(card, code) {
     if (c1) card.style.background = 'linear-gradient(155deg,'+c1+' 0%,'+c2+' 35%,var(--card) 100%)';
 }
 
-// cardBg → border, surface, bg card pill selected
-function deriveFromCardBg(hex) {
-    if (!hex || hex.length < 4) return {};
-    const lum = getLum(hex);
-    return {
-        border: lum > 0.5 ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.07)',
-        borderH: lum > 0.5 ? 'rgba(0,0,0,0.18)' : 'rgba(255,255,255,0.12)',
-        surface: lum > 0.5 ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.04)',
-        pillSelText: lum > 0.5 ? '#111' : '#fff'
-    };
-}
-
-// cardText → muted, fg, button text color, pill selected bg
-function deriveFromCardText(hex) {
-    if (!hex || hex.length < 4) return {};
-    const lum = getLum(hex);
-    return {
-        muted: lum > 0.5 ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)',
-        btnText: lum > 0.5 ? '#111' : '#fff',
-        pillSelBg: lum > 0.5 ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.9)'
-    };
-}
-
 // =============================================
 // Fetch Product
 // =============================================
@@ -410,28 +377,24 @@ async function fetchProduct() {
         st.textContent = 'Rendering...';
         product = data.product; variants = data.variants || [];
 
-        // === Terapkan warna dari sheet ===
         const root = document.documentElement.style;
 
-        // BG Color → background halaman
+        // BG Color
         if (product.bgColor) { root.setProperty('--bg', product.bgColor); document.body.style.background = product.bgColor; }
 
         // Card BG → card, border, surface
         if (product.cardBg) {
             root.setProperty('--card', product.cardBg);
-            const cb = deriveFromCardBg(product.cardBg);
-            if (cb.border) root.setProperty('--border', cb.border);
-            if (cb.borderH) root.setProperty('--border-h', cb.borderH);
-            if (cb.surface) root.setProperty('--surface', cb.surface);
+            const lum = getLum(product.cardBg);
+            root.setProperty('--border', lum > 0.5 ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.06)');
+            root.setProperty('--border-h', lum > 0.5 ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.1)');
+            root.setProperty('--surface', lum > 0.5 ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)');
         }
 
-        // Card Text → fg, muted, button, pill selected
+        // Card Text → fg (semua teks), muted (50% opacity dari fg)
         if (product.cardText) {
             root.setProperty('--fg', product.cardText);
-            const ct = deriveFromCardText(product.cardText);
-            if (ct.muted) root.setProperty('--muted', ct.muted);
-            if (ct.btnText) root.setProperty('--btn-text', ct.btnText);
-            if (ct.pillSelBg) root.setProperty('--pill-sel-bg', ct.pillSelBg);
+            root.setProperty('--muted', hexToRgba(product.cardText, 0.5));
         }
 
         if (product.gtmId) { const s=document.createElement('script'); s.textContent="(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','"+product.gtmId+"');"; document.head.prepend(s); }
@@ -594,7 +557,7 @@ function renderCart() {
     if(!cart.length){em.classList.remove('hidden');it.classList.add('hidden');to.classList.add('hidden');sb.disabled=true;return;}
     em.classList.add('hidden');it.classList.remove('hidden');to.classList.remove('hidden');sb.disabled=false;
     const cur=product.currency||'USD';let h='',sub=0,tw=0;
-    cart.forEach((item,i)=>{const t=item.unitPrice*item.qty;sub+=t;tw+=item.weight*item.qty;const lb=[item.color,item.size].filter(Boolean).join(' / ')||'Product';const lf=item.sku?lb+' ('+item.sku+')':lb;h+='<div class="cart-enter flex items-center gap-2 p-2 rounded-lg" style="background:var(--surface)">'+(item.variantImage?'<img src="'+esc(item.variantImage)+'" class="w-9 h-9 rounded-lg object-cover flex-shrink-0" style="background:var(--card)" alt="">':'')+'<div class="flex-1 min-w-0"><p class="text-xs font-semibold truncate" style="color:var(--fg)">'+esc(lf)+'</p><p style="color:var(--muted);font-size:10px">'+fmtPrice(item.unitPrice,cur)+' x '+item.qty+'</p></div><div class="flex items-center gap-1 flex-shrink-0"><span class="text-xs font-bold" style="color:var(--fg)">'+fmtPrice(t,cur)+'</span><button class="rm-btn" onclick="removeFromCart('+i+')" aria-label="Remove"><i class="fas fa-times"></i></button></div></div>';});
+    cart.forEach((item,i)=>{const t=item.unitPrice*item.qty;sub+=t;tw+=item.weight*item.qty;const lb=[item.color,item.size].filter(Boolean).join(' / ')||'Product';const lf=item.sku?lb+' ('+item.sku+')':lb;h+='<div class="cart-enter flex items-center gap-2 p-2 rounded-lg" style="background:var(--surface);border:1px solid var(--border)">'+(item.variantImage?'<img src="'+esc(item.variantImage)+'" class="w-9 h-9 rounded-lg object-cover flex-shrink-0" style="background:var(--card)" alt="">':'')+'<div class="flex-1 min-w-0"><p class="text-xs font-semibold truncate" style="color:var(--fg)">'+esc(lf)+'</p><p style="color:var(--muted);font-size:10px">'+fmtPrice(item.unitPrice,cur)+' x '+item.qty+'</p></div><div class="flex items-center gap-1 flex-shrink-0"><span class="text-xs font-bold" style="color:var(--fg)">'+fmtPrice(t,cur)+'</span><button class="rm-btn" onclick="removeFromCart('+i+')" aria-label="Remove"><i class="fas fa-times"></i></button></div></div>';});
     it.innerHTML=h;
     const sk=Number(product.shippingCostPerKg)||0,se=Number(product.shipExtraPercent)||0;
     let sc=(sk>0&&tw>0)?tw*sk*(1+se/100):0;const gr=sub+sc;
@@ -620,20 +583,13 @@ async function submitOrder() {
           order={orderId:oid,date:new Date().toISOString(),buyer:{name:n,phone:ph,email:em,country:co,address:ad},
           items:cart.map(i=>({sku:i.sku,color:i.color,size:i.size,qty:i.qty,unitPrice:i.unitPrice,weight:i.weight})),
           subtotal:sub,shippingWeight:Math.round(tw*1000)/1000,shippingCost:Math.round(sc*100)/100,grandTotal:Math.round(gt*100)/100};
-
     const btn=document.getElementById('submit-btn');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin mr-1"></i>Processing...';
     try{
         const r=await fetch(CFG.SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'saveAndNotify',sheet:SHEET,order,sellerEmail:CFG.SELLER_EMAIL,productTitle:product.name||'Product'})});
         const tx=await r.text();let d;try{d=JSON.parse(tx);}catch{throw new Error('Invalid: '+tx.substring(0,150));}
         if(!d.success)throw new Error(d.error||'Server error');
-
-        // Track analytics (fire & forget)
         fetch(CFG.SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'trackEvent',sheet:SHEET,event:'purchase',orderId:oid,itemsCount:cart.length,revenue:gt,details:'Order by '+n})}).catch(()=>{});
-
-        // Simpan order untuk modal
         lastOrder = order;
-
-        // Isi modal sukses
         document.getElementById('modal-oid').textContent = 'Order ID: ' + oid;
         document.getElementById('modal-product').textContent = product.name || 'Product';
         let itemsHtml = '';
@@ -645,18 +601,11 @@ async function submitOrder() {
         document.getElementById('modal-sub').textContent = fmtPrice(sub, cur);
         document.getElementById('modal-ship').textContent = sc > 0 ? fmtPrice(sc, cur) : 'Free';
         document.getElementById('modal-total').textContent = fmtPrice(gt, cur);
-
-        // Sembunyikan tombol Pay Now jika tidak ada PayPal link
         document.getElementById('modal-pay').style.display = CFG.PAYPAL_ME ? '' : 'none';
-
-        // Tampilkan modal (TIDAK buka PayPal dulu)
         document.getElementById('success-modal').classList.add('show');
-
-        // Reset
         cart=[];renderCart();document.getElementById('buyer-form').reset();
         document.querySelectorAll('#variant-cards .variant-card.selected').forEach(c=>c.classList.remove('selected'));
         document.querySelectorAll('#variant-cards .sz-pill.sel').forEach(p=>p.classList.remove('sel'));
-
     }catch(e){console.error(e);showToast('Failed: '+e.message,'err');}
     finally{btn.disabled=cart.length===0;btn.innerHTML='<i class="fas fa-lock mr-1.5" style="font-size:12px"></i>Place Order';}
 }
