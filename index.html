@@ -34,56 +34,60 @@
         .ld-grid span:nth-child(9){animation-delay:.8s}
         @keyframes ldP{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
 
-        #banner{position:relative;width:100%;height:52vh;min-height:300px;overflow:hidden;background:var(--surface)}
+        #banner{position:relative;width:100%;height:46vh;min-height:260px;overflow:hidden;background:var(--surface)}
         #banner img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease}
         #banner:hover img{transform:scale(1.03)}
-        .banner-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(17,17,17,.4) 40%,transparent 70%);display:flex;flex-direction:column;justify-content:flex-end;padding:32px}
+        .banner-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(17,17,17,.4) 40%,transparent 70%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px}
 
-        .variant-card{background:var(--card);border:2px solid var(--border);border-radius:16px;overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1)}
+        /* === VARIANT CARDS === */
+        .variant-card{background:var(--card);border:2px solid var(--border);border-radius:16px;overflow:hidden;
+            transition:all .3s cubic-bezier(.4,0,.2,1)}
         .variant-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.3);border-color:var(--border-h)}
         .variant-card.selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 12px 40px var(--accent-glow)}
         .variant-card.clickable{cursor:pointer}
 
-        .card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
-        .clr-sw{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.12);flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
-        .clr-nm{font-weight:600;font-size:15px;margin-left:10px}
-        .card-pr{font-weight:700;font-size:15px;color:var(--accent)}
+        .card-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border)}
+        .clr-sw{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.12);flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+        .clr-nm{font-weight:600;font-size:14px;margin-left:8px}
+        .card-pr{font-weight:700;font-size:14px;color:var(--accent)}
 
-        .card-img{padding:10px 18px 0}
-        .card-img img{width:100%;height:150px;object-fit:cover;border-radius:10px;background:var(--surface)}
-        .card-sizes{display:flex;flex-wrap:wrap;gap:8px;padding:14px 18px 18px}
+        .card-img{padding:8px 14px 0}
+        .card-img img{width:100%;height:130px;object-fit:cover;border-radius:10px;background:var(--surface)}
+        .card-sizes{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px 14px}
 
-        .sz-pill{display:flex;flex-direction:column;align-items:center;padding:8px 14px;border-radius:10px;
-            border:1.5px solid var(--border);background:var(--surface);color:var(--fg);min-width:54px;
-            transition:all .2s ease;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px}
+        .sz-pill{display:flex;flex-direction:column;align-items:center;padding:7px 12px;border-radius:9px;
+            border:1.5px solid var(--border);background:var(--surface);color:var(--fg);min-width:50px;
+            transition:all .2s ease;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px}
         .sz-pill:hover:not(:disabled):not(.sel){border-color:var(--accent);background:rgba(201,149,60,.08)}
         .sz-pill.sel{background:var(--accent);border-color:var(--accent);color:#111;font-weight:600;
             box-shadow:0 4px 16px var(--accent-glow);transform:scale(1.06)}
         .sz-pill.sel .sz-stk{color:rgba(0,0,0,.55)}
         .sz-pill.oos{opacity:.28;cursor:not-allowed;pointer-events:none}
         .sz-pill.oos .sz-lbl{text-decoration:line-through}
-        .sz-stk{font-size:10px;color:var(--muted);margin-top:2px}
+        .sz-stk{font-size:9px;color:var(--muted);margin-top:1px}
 
-        .card-body-co{padding:14px 18px;display:flex;align-items:center;gap:14px}
-        .card-body-co img{width:76px;height:76px;object-fit:cover;border-radius:10px;background:var(--surface);flex-shrink:0}
-        .stk-info{font-size:12px;color:var(--muted);margin-top:4px}
-        .size-only-head{padding:14px 18px 0;font-weight:600;font-size:14px;color:var(--muted)}
+        .card-body-co{padding:12px 14px;display:flex;align-items:center;gap:12px}
+        .card-body-co img{width:68px;height:68px;object-fit:cover;border-radius:10px;background:var(--surface);flex-shrink:0}
+        .stk-info{font-size:11px;color:var(--muted);margin-top:3px}
+        .size-only-head{padding:12px 14px 0;font-weight:600;font-size:13px;color:var(--muted)}
 
-        .order-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px}
-        .fi{width:100%;padding:11px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+        /* === END VARIANT CARDS === */
+
+        .order-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+        .fi{width:100%;padding:10px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
             color:var(--fg);font-size:14px;font-family:'DM Sans',sans-serif;transition:border-color .2s;outline:none}
         .fi:focus{border-color:var(--accent)}
         .fi::placeholder{color:var(--muted)}
-        .fl{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+        .fl{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
 
-        .qty-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--surface);
+        .qty-btn{width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--surface);
             border:1.5px solid var(--border);border-radius:10px;color:var(--fg);cursor:pointer;transition:all .2s;font-size:18px;font-weight:600}
         .qty-btn:hover{border-color:var(--accent);color:var(--accent)}
-        .qty-in{width:52px;height:40px;text-align:center;background:var(--surface);border:1.5px solid var(--border);
-            border-radius:10px;color:var(--fg);font-size:16px;font-weight:600;font-family:'DM Sans',sans-serif;outline:none}
+        .qty-in{width:48px;height:38px;text-align:center;background:var(--surface);border:1.5px solid var(--border);
+            border-radius:10px;color:var(--fg);font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;outline:none}
         .qty-in:focus{border-color:var(--accent)}
 
-        .btn-p{width:100%;padding:14px 24px;background:var(--accent);color:#111;font-size:15px;font-weight:700;
+        .btn-p{width:100%;padding:13px 24px;background:var(--accent);color:#111;font-size:15px;font-weight:700;
             border:none;border-radius:12px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
         .btn-p:hover{background:var(--accent-h);transform:translateY(-1px)}
         .btn-p:active{transform:scale(.98)}
@@ -98,32 +102,37 @@
         @keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
         .cart-enter{animation:slideIn .3s ease}
 
-        .toast{position:fixed;bottom:24px;right:24px;padding:14px 22px;border-radius:12px;font-size:14px;font-weight:500;
-            z-index:10000;transform:translateY(100px);opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1);max-width:400px}
-        .toast.show{transform:translateY(0);opacity:1}
+        .toast{position:fixed;bottom:20px;left:50%;right:auto;transform:translateX(-50%) translateY(100px);opacity:0;
+            padding:12px 20px;border-radius:12px;font-size:13px;font-weight:500;z-index:10000;
+            transition:all .4s cubic-bezier(.4,0,.2,1);max-width:90vw;white-space:nowrap}
+        .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
         .toast.ok{background:#065f46;color:#d1fae5;border:1px solid #10b981}
         .toast.err{background:#7f1d1d;color:#fecaca;border:1px solid #f87171}
 
         .modal-ov{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
-            display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s}
+            display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
         .modal-ov.show{opacity:1;pointer-events:all}
-        .modal-ct{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px;
-            max-width:460px;width:100%;transform:scale(.9);transition:transform .3s;text-align:center}
+        .modal-ct{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;
+            max-width:420px;width:100%;transform:scale(.9);transition:transform .3s;text-align:center}
         .modal-ov.show .modal-ct{transform:scale(1)}
 
-        .desc-toggle{cursor:pointer;color:var(--accent);font-size:13px;font-weight:600;border:none;background:none;
-            font-family:'DM Sans',sans-serif;padding:0;margin-top:4px}
+        .desc-toggle{cursor:pointer;color:var(--accent);font-size:12px;font-weight:600;border:none;background:none;
+            font-family:'DM Sans',sans-serif;padding:0;margin-top:3px}
         .desc-toggle:hover{text-decoration:underline}
 
-        .err-box{background:rgba(127,29,29,.15);border:1px solid rgba(248,113,113,.3);border-radius:12px;padding:20px;margin-top:16px;text-align:left}
-        .err-box code{display:block;margin-top:10px;padding:12px;background:rgba(0,0,0,.4);border-radius:8px;
-            font-size:12px;color:#fca5a5;word-break:break-all;font-family:'DM Mono',monospace;white-space:pre-wrap;line-height:1.5}
+        .err-box{background:rgba(127,29,29,.15);border:1px solid rgba(248,113,113,.3);border-radius:12px;padding:16px;margin-top:12px;text-align:left}
+        .err-box code{display:block;margin-top:8px;padding:10px;background:rgba(0,0,0,.4);border-radius:8px;
+            font-size:11px;color:#fca5a5;word-break:break-all;font-family:monospace;white-space:pre-wrap;line-height:1.4}
 
-        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}
+        ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}
         ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-        @media(max-width:640px){#banner{height:38vh;min-height:220px}.banner-ov{padding:20px}}
+        @media(max-width:640px){
+            #banner{height:36vh;min-height:200px}
+            .banner-ov{padding:16px}
+            .order-card{padding:16px}
+        }
     </style>
 </head>
 <body>
@@ -138,9 +147,9 @@
     <div class="text-center max-w-lg w-full">
         <i class="fas fa-exclamation-triangle text-4xl mb-4" style="color:var(--error)"></i>
         <h2 class="text-xl font-bold mb-2">Failed to Load Product</h2>
-        <p id="err-msg" style="color:var(--muted);font-size:14px" class="mb-2"></p>
+        <p id="err-msg" style="color:var(--muted);font-size:14px;white-space:pre-line" class="mb-2"></p>
         <div id="err-detail" class="err-box hidden">
-            <p style="font-size:12px;color:#fca5a5;font-weight:600">Detail Error:</p>
+            <p style="font-size:12px;color:#fca5a5;font-weight:600">Detail:</p>
             <code id="err-code"></code>
         </div>
         <div class="flex gap-3 justify-center mt-6 flex-wrap">
@@ -160,70 +169,74 @@
     <header id="banner">
         <img id="banner-img" src="" alt="Banner">
         <div class="banner-ov">
-            <span id="cat-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3" style="background:var(--accent);color:#111;letter-spacing:.5px;width:fit-content"></span>
-            <h1 id="prod-name" class="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight"></h1>
+            <span id="cat-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-2" style="background:var(--accent);color:#111;letter-spacing:.5px;width:fit-content"></span>
+            <h1 id="prod-name" class="text-2xl sm:text-3xl lg:text-5xl font-black leading-tight"></h1>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 lg:py-12">
-        <div class="grid lg:grid-cols-5 gap-8 lg:gap-12">
+    <!-- Mobile-first: 1 kolom, desktop 2 kolom -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5 lg:py-12">
+        <div class="grid lg:grid-cols-5 gap-5 lg:gap-12">
 
-            <div class="lg:col-span-3 space-y-8">
+            <!-- Kiri: Produk + Varian — jarak rapat di mobile -->
+            <div class="lg:col-span-3 space-y-3 lg:space-y-8">
 
                 <div id="price-block" class="flex items-baseline gap-3 flex-wrap"></div>
 
                 <div id="desc-block" class="hidden">
-                    <div id="desc-text" style="color:var(--muted);font-size:14px;line-height:1.7"></div>
+                    <div id="desc-text" style="color:var(--muted);font-size:13px;line-height:1.65"></div>
                     <button id="desc-btn" class="desc-toggle">Read more</button>
                 </div>
 
                 <div id="prod-img-block" class="hidden">
-                    <img id="prod-img" src="" alt="Product" class="w-full rounded-2xl" style="max-height:420px;object-fit:cover;background:var(--surface)">
+                    <img id="prod-img" src="" alt="Product" class="w-full rounded-2xl" style="max-height:380px;object-fit:cover;background:var(--surface)">
                 </div>
 
                 <section id="variant-section">
-                    <h2 class="text-lg font-bold mb-4" style="font-size:18px">
-                        <i class="fas fa-swatchbook mr-2" style="color:var(--accent);font-size:16px"></i>Select Variant
+                    <h2 class="font-bold mb-3" style="font-size:15px">
+                        <i class="fas fa-swatchbook mr-2" style="color:var(--accent);font-size:14px"></i>Select Variant
                     </h2>
                     <div id="variant-cards"></div>
                 </section>
 
-                <section id="add-section" class="flex items-center gap-4 flex-wrap">
+                <!-- Quantity + Add — langsung di bawah card -->
+                <section id="add-section" class="flex items-center gap-3 flex-wrap">
                     <div class="flex items-center gap-2">
                         <button class="qty-btn" id="qty-minus" aria-label="Decrease quantity">−</button>
                         <input type="number" class="qty-in" id="qty-input" value="1" min="1" max="999" aria-label="Quantity">
                         <button class="qty-btn" id="qty-plus" aria-label="Increase quantity">+</button>
                     </div>
-                    <button class="btn-p" id="add-btn" style="width:auto;flex:1;min-width:180px">
+                    <button class="btn-p" id="add-btn" style="width:auto;flex:1;min-width:140px;padding:11px 20px">
                         <i class="fas fa-cart-plus mr-2"></i>Add to Order
                     </button>
                 </section>
             </div>
 
+            <!-- Kanan: Order + Form -->
             <div class="lg:col-span-2">
-                <div class="lg:sticky lg:top-6 space-y-6">
+                <div class="lg:sticky lg:top-4 space-y-4 lg:space-y-6">
 
                     <div class="order-card">
-                        <h2 class="text-lg font-bold mb-4" style="font-size:18px">
-                            <i class="fas fa-receipt mr-2" style="color:var(--accent);font-size:16px"></i>Order Summary
+                        <h2 class="font-bold mb-3" style="font-size:15px">
+                            <i class="fas fa-receipt mr-2" style="color:var(--accent);font-size:14px"></i>Order Summary
                         </h2>
-                        <div id="cart-empty" class="text-center py-8" style="color:var(--muted);font-size:14px">
-                            <i class="fas fa-shopping-bag text-2xl mb-3 block" style="opacity:.3"></i>
+                        <div id="cart-empty" class="text-center py-6" style="color:var(--muted);font-size:13px">
+                            <i class="fas fa-shopping-bag text-xl mb-2 block" style="opacity:.3"></i>
                             No items yet
                         </div>
-                        <div id="cart-items" class="space-y-3 hidden"></div>
-                        <div id="cart-totals" class="hidden mt-5 pt-5" style="border-top:1px solid var(--border)">
-                            <div class="flex justify-between text-sm mb-2"><span style="color:var(--muted)">Subtotal</span><span id="t-sub"></span></div>
-                            <div class="flex justify-between text-sm mb-3"><span style="color:var(--muted)">Shipping</span><span id="t-ship"></span></div>
-                            <div class="flex justify-between font-bold text-lg pt-3" style="border-top:1px solid var(--border)"><span>Total</span><span id="t-total" style="color:var(--accent)"></span></div>
+                        <div id="cart-items" class="space-y-2 hidden"></div>
+                        <div id="cart-totals" class="hidden mt-4 pt-4" style="border-top:1px solid var(--border)">
+                            <div class="flex justify-between text-sm mb-1"><span style="color:var(--muted)">Subtotal</span><span id="t-sub"></span></div>
+                            <div class="flex justify-between text-sm mb-2"><span style="color:var(--muted)">Shipping</span><span id="t-ship"></span></div>
+                            <div class="flex justify-between font-bold text-lg pt-2" style="border-top:1px solid var(--border)"><span>Total</span><span id="t-total" style="color:var(--accent)"></span></div>
                         </div>
                     </div>
 
                     <div class="order-card">
-                        <h2 class="text-lg font-bold mb-5" style="font-size:18px">
-                            <i class="fas fa-truck mr-2" style="color:var(--accent);font-size:16px"></i>Shipping Details
+                        <h2 class="font-bold mb-4" style="font-size:15px">
+                            <i class="fas fa-truck mr-2" style="color:var(--accent);font-size:14px"></i>Shipping Details
                         </h2>
-                        <form id="buyer-form" class="space-y-4" autocomplete="off" novalidate>
+                        <form id="buyer-form" class="space-y-3" autocomplete="off" novalidate>
                             <div>
                                 <label class="fl" for="f-name">Full Name <span style="color:var(--error)">*</span></label>
                                 <input class="fi" id="f-name" type="text" placeholder="John Doe" required>
@@ -244,16 +257,16 @@
                             </div>
                             <div>
                                 <label class="fl" for="f-addr">Full Address <span style="color:var(--error)">*</span></label>
-                                <textarea class="fi" id="f-addr" rows="3" placeholder="Street, apt, city, state, zip..." required style="resize:vertical"></textarea>
+                                <textarea class="fi" id="f-addr" rows="2" placeholder="Street, apt, city, state, zip..." required style="resize:vertical"></textarea>
                             </div>
                             <p id="form-err" class="hidden text-sm" style="color:var(--error)"></p>
                         </form>
                     </div>
 
-                    <button class="btn-p" id="submit-btn" disabled style="padding:16px;font-size:16px;letter-spacing:.3px">
-                        <i class="fas fa-lock mr-2" style="font-size:14px"></i>Place Order
+                    <button class="btn-p" id="submit-btn" disabled style="padding:14px;font-size:15px">
+                        <i class="fas fa-lock mr-2" style="font-size:13px"></i>Place Order
                     </button>
-                    <p class="text-center text-xs" style="color:var(--muted);opacity:.6">
+                    <p class="text-center text-xs" style="color:var(--muted);opacity:.5">
                         <i class="fas fa-shield-alt mr-1"></i>Secure checkout via PayPal
                     </p>
                 </div>
@@ -262,23 +275,22 @@
     </main>
 
     <div id="footer-section" class="hidden">
-        <img id="footer-img" src="" alt="Footer" style="width:100%;max-height:180px;object-fit:cover;opacity:.5">
+        <img id="footer-img" src="" alt="Footer" style="width:100%;max-height:160px;object-fit:cover;opacity:.5">
     </div>
 </div>
 
 <div id="success-modal" class="modal-ov">
     <div class="modal-ct">
-        <div class="w-16 h-16 rounded-full mx-auto mb-5 flex items-center justify-center" style="background:rgba(52,211,153,.15)">
-            <i class="fas fa-check text-2xl" style="color:var(--success)"></i>
+        <div class="w-14 h-14 rounded-full mx-auto mb-4 flex items-center justify-center" style="background:rgba(52,211,153,.15)">
+            <i class="fas fa-check text-xl" style="color:var(--success)"></i>
         </div>
-        <h2 class="text-2xl font-bold mb-2">Order Placed</h2>
+        <h2 class="text-xl font-bold mb-2">Order Placed</h2>
         <p id="modal-oid" class="text-sm mb-1" style="color:var(--muted)"></p>
-        <p id="modal-total" class="text-xl font-bold mb-6" style="color:var(--accent)"></p>
-        <p class="text-sm mb-6" style="color:var(--muted);line-height:1.6">
-            Please complete your payment via the PayPal link.<br>
-            A confirmation email has been sent.
+        <p id="modal-total" class="text-lg font-bold mb-5" style="color:var(--accent)"></p>
+        <p class="text-sm mb-5" style="color:var(--muted);line-height:1.5">
+            Please complete your payment via the PayPal link.<br>A confirmation email has been sent.
         </p>
-        <button class="btn-p" id="modal-close" style="width:auto;display:inline-block;padding:12px 40px">Done</button>
+        <button class="btn-p" id="modal-close" style="width:auto;display:inline-block;padding:11px 36px">Done</button>
     </div>
 </div>
 
@@ -345,122 +357,80 @@ function getMaxQty() {
 }
 
 // =============================================
-// FETCH PRODUCT — Error handling detail
+// HEX → RGBA (untuk background card)
+// =============================================
+function hexToRgba(hex, alpha) {
+    if (!hex || hex === '#' || hex.length < 4) return '';
+    hex = hex.replace('#', '');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    if (hex.length !== 6) return '';
+    const r = parseInt(hex.substring(0,2), 16);
+    const g = parseInt(hex.substring(2,4), 16);
+    const b = parseInt(hex.substring(4,6), 16);
+    if (isNaN(r) || isNaN(g) || isNaN(b)) return '';
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+}
+
+// Terapkan warna ke card
+function applyCardBg(card, colorCode) {
+    if (!colorCode) return;
+    const rgba1 = hexToRgba(colorCode, 0.1);
+    const rgba2 = hexToRgba(colorCode, 0.03);
+    if (rgba1) {
+        card.style.background = 'linear-gradient(145deg, ' + rgba1 + ' 0%, ' + rgba2 + ' 50%, var(--card) 100%)';
+    }
+}
+
+// =============================================
+// FETCH PRODUCT
 // =============================================
 async function fetchProduct() {
     const statusEl = document.getElementById('loader-status');
-
     try {
-        // Step 1: Bangun URL dengan cache-buster
         const fetchUrl = CFG.SCRIPT_URL + '?sheet=' + encodeURIComponent(SHEET) + '&_t=' + Date.now();
-        statusEl.textContent = 'Connecting to server...';
-
-        // Step 2: Fetch dengan timeout 20 detik
+        statusEl.textContent = 'Connecting...';
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 20000);
-
         let res;
-        try {
-            res = await fetch(fetchUrl, { signal: controller.signal });
-        } catch (fetchErr) {
+        try { res = await fetch(fetchUrl, { signal: controller.signal }); }
+        catch (fetchErr) {
             clearTimeout(timeoutId);
-            if (fetchErr.name === 'AbortError') {
-                throw { type: 'timeout', message: 'Connection timed out after 20 seconds.' };
-            }
-            throw { type: 'network', message: fetchErr.message };
+            if (fetchErr.name === 'AbortError') throw { type:'timeout', message:'Connection timed out (20s).' };
+            throw { type:'network', message:fetchErr.message };
         }
         clearTimeout(timeoutId);
-
-        statusEl.textContent = 'Got response, parsing...';
-
-        // Step 3: Cek status HTTP
-        if (!res.ok) {
-            const errText = await res.text().catch(() => 'Could not read error response');
-            throw { type: 'http', status: res.status, body: errText };
-        }
-
-        // Step 4: Baca sebagai text dulu, lalu parse JSON
+        statusEl.textContent = 'Parsing...';
+        if (!res.ok) { const t = await res.text().catch(()=>''); throw { type:'http', status:res.status, body:t }; }
         const rawText = await res.text();
-
         let data;
-        try {
-            data = JSON.parse(rawText);
-        } catch (parseErr) {
-            // JSON parsing gagal — server kemungkinan mengembalikan HTML error
-            throw { type: 'parse', body: rawText };
-        }
-
-        statusEl.textContent = 'Rendering product...';
-
-        // Step 5: Cek success flag
-        if (!data.success) {
-            throw { type: 'server', message: data.error || 'Unknown server error', data: data };
-        }
-
-        // Step 6: Validasi data produk
-        if (!data.product) {
-            throw { type: 'data', message: 'No product data in response', data: data };
-        }
-
-        // === BERHASIL ===
+        try { data = JSON.parse(rawText); } catch { throw { type:'parse', body:rawText }; }
+        if (!data.success) throw { type:'server', message:data.error||'Unknown server error', data };
+        if (!data.product) throw { type:'data', message:'No product data in response', data };
+        statusEl.textContent = 'Rendering...';
         product = data.product;
         variants = data.variants || [];
-
-        if (product.bgColor) {
-            document.documentElement.style.setProperty('--bg', product.bgColor);
-            document.body.style.background = product.bgColor;
-        }
-
+        if (product.bgColor) { document.documentElement.style.setProperty('--bg', product.bgColor); document.body.style.background = product.bgColor; }
         if (product.gtmId) {
             const s = document.createElement('script');
-            s.textContent = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${product.gtmId}');`;
+            s.textContent = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','"+product.gtmId+"');";
             document.head.prepend(s);
         }
         if (product.ga4Id) {
-            const s = document.createElement('script');
-            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + product.ga4Id;
-            document.head.prepend(s);
-            const s2 = document.createElement('script');
-            s2.textContent = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${product.ga4Id}');`;
-            document.head.appendChild(s2);
+            const s = document.createElement('script'); s.src = 'https://www.googletagmanager.com/gtag/js?id='+product.ga4Id; document.head.prepend(s);
+            const s2 = document.createElement('script'); s2.textContent = "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','"+product.ga4Id+"');"; document.head.appendChild(s2);
         }
-
         renderProduct();
         document.getElementById('loader').classList.add('hide');
         document.getElementById('app').classList.remove('hidden');
-
     } catch (err) {
         console.error('fetchProduct error:', err);
-
-        let userMsg = '';
-        let detailCode = '';
-
-        if (err.type === 'timeout') {
-            userMsg = 'Server tidak merespon dalam 20 detik. Pastikan URL Apps Script benar dan deployment aktif.';
-            detailCode = 'Error: Timeout\nURL: ' + CFG.SCRIPT_URL + '\nSheet: ' + SHEET;
-        } else if (err.type === 'network') {
-            userMsg = 'Gagal terhubung ke server. Kemungkinan:\n• Deployment GAS belum diset "Anyone" can access\n• URL script salah\n• Koneksi internet bermasalah';
-            detailCode = 'Error: ' + err.message + '\nURL: ' + CFG.SCRIPT_URL;
-        } else if (err.type === 'http') {
-            userMsg = 'Server mengembalikan HTTP ' + err.status + '. Deployment mungkin belum diaktifkan atau mengalami error.';
-            detailCode = 'HTTP ' + err.status + '\n' + (err.body || '').substring(0, 500);
-        } else if (err.type === 'parse') {
-            userMsg = 'Server tidak mengembalikan JSON. Kemungkinan Apps Script error saat running doGet(). Buka tab "Executions" di Apps Script untuk melihat errornya.';
-            detailCode = 'Response (first 500 chars):\n' + (err.body || '').substring(0, 500);
-        } else if (err.type === 'server') {
-            userMsg = err.message;
-            if (err.message && err.message.includes('Sheet not found')) {
-                userMsg += '\n\nNama sheet di URL: "' + SHEET + '"\nPastikan nama sheet di Google Sheets sama persis (case-sensitive).';
-            }
-            detailCode = JSON.stringify(err.data, null, 2);
-        } else if (err.type === 'data') {
-            userMsg = err.message;
-            detailCode = JSON.stringify(err.data, null, 2);
-        } else {
-            userMsg = err.message || 'Unknown error';
-            detailCode = String(err);
-        }
-
+        let userMsg = '', detailCode = '';
+        if (err.type==='timeout') { userMsg='Server tidak merespon dalam 20 detik. Pastikan URL Apps Script benar dan deployment aktif.'; detailCode='Timeout\nURL: '+CFG.SCRIPT_URL+'\nSheet: '+SHEET; }
+        else if (err.type==='network') { userMsg='Gagal terhubung. Pastikan deployment GAS diset "Anyone" can access.'; detailCode=err.message+'\nURL: '+CFG.SCRIPT_URL; }
+        else if (err.type==='http') { userMsg='HTTP '+err.status+'. Deployment mungkin belum aktif.'; detailCode='HTTP '+err.status+'\n'+(err.body||'').substring(0,500); }
+        else if (err.type==='parse') { userMsg='Server tidak mengembalikan JSON. Cek tab Executions di Apps Script.'; detailCode=(err.body||'').substring(0,500); }
+        else if (err.type==='server') { userMsg=err.message; if(err.message&&err.message.includes('Sheet not found')) userMsg+='\n\nSheet di URL: "'+SHEET+'"\nPastikan nama sheet sama persis (case-sensitive).'; detailCode=JSON.stringify(err.data,null,2); }
+        else { userMsg=err.message||'Unknown error'; detailCode=String(err); }
         document.getElementById('err-msg').textContent = userMsg;
         document.getElementById('err-code').textContent = detailCode;
         document.getElementById('err-detail').classList.remove('hidden');
@@ -469,135 +439,77 @@ async function fetchProduct() {
     }
 }
 
-// =============================================
-// Diagnose — bantu debug
-// =============================================
 async function testConnection() {
-    const diagEl = document.getElementById('diag-result');
-    diagEl.classList.remove('hidden');
-    diagEl.innerHTML = '<p style="color:var(--accent);font-size:13px"><i class="fas fa-spinner fa-spin mr-2"></i>Running diagnostics...</p>';
-
-    let results = [];
-
-    // Test 1: Cek URL bisa di-fetch
+    const d = document.getElementById('diag-result');
+    d.classList.remove('hidden');
+    d.innerHTML = '<p style="color:var(--accent);font-size:12px"><i class="fas fa-spinner fa-spin mr-2"></i>Running diagnostics...</p>';
+    let r = [];
     try {
-        const r = await fetch(CFG.SCRIPT_URL + '?sheet=' + encodeURIComponent(SHEET) + '&_t=' + Date.now(), { signal: AbortSignal.timeout(15000) });
-        results.push('<b style="color:var(--success)">OK</b> — HTTP ' + r.status + ' ' + r.statusText);
-        results.push('Content-Type: ' + (r.headers.get('content-type') || 'unknown'));
-
-        const text = await r.text();
-        // Cek apakah JSON
+        const res = await fetch(CFG.SCRIPT_URL+'?sheet='+encodeURIComponent(SHEET)+'&_t='+Date.now(), {signal:AbortSignal.timeout(15000)});
+        r.push('<b style="color:var(--success)">OK</b> — HTTP '+res.status);
+        r.push('Content-Type: '+(res.headers.get('content-type')||'unknown'));
+        const txt = await res.text();
         try {
-            const json = JSON.parse(text);
-            if (json.success) {
-                results.push('<b style="color:var(--success)">OK</b> — Response valid JSON, success=true');
-                results.push('Product: ' + (json.product?.name || '-'));
-                results.push('Variants: ' + (json.variants?.length || 0));
-            } else {
-                results.push('<b style="color:var(--error)">FAIL</b> — JSON returned success=false');
-                results.push('Error: ' + (json.error || '-'));
-            }
-        } catch {
-            results.push('<b style="color:var(--error)">FAIL</b> — Response bukan JSON');
-            results.push('First 200 chars: ' + text.substring(0, 200));
-        }
-    } catch (e) {
-        results.push('<b style="color:var(--error)">FAIL</b> — ' + e.message);
-    }
-
-    // Test 2: Info sheet
-    results.push('');
-    results.push('<b>Sheet parameter:</b> "' + SHEET + '"');
-    results.push('<b>Full URL:</b> ' + CFG.SCRIPT_URL + '?sheet=' + encodeURIComponent(SHEET));
-
-    diagEl.innerHTML = results.map(r => '<p style="font-size:12px;color:var(--muted);margin-bottom:4px">' + r + '</p>').join('');
+            const json = JSON.parse(txt);
+            if(json.success) { r.push('<b style="color:var(--success)">OK</b> — JSON valid, success=true'); r.push('Product: '+(json.product?.name||'-')); r.push('Variants: '+(json.variants?.length||0)); }
+            else { r.push('<b style="color:var(--error)">FAIL</b> — success=false: '+(json.error||'-')); }
+        } catch { r.push('<b style="color:var(--error)">FAIL</b> — bukan JSON'); r.push('First 200 chars: '+txt.substring(0,200)); }
+    } catch(e) { r.push('<b style="color:var(--error)">FAIL</b> — '+e.message); }
+    r.push(''); r.push('<b>Sheet:</b> "'+SHEET+'"'); r.push('<b>URL:</b> '+CFG.SCRIPT_URL+'?sheet='+encodeURIComponent(SHEET));
+    d.innerHTML = r.map(x=>'<p style="font-size:11px;color:var(--muted);margin-bottom:3px">'+x+'</p>').join('');
 }
 
 // =============================================
-// Render Product
+// RENDER PRODUCT
 // =============================================
 function renderProduct() {
     const bannerEl = document.getElementById('banner-img');
-    if (product.bannerImage) {
-        bannerEl.src = product.bannerImage; bannerEl.style.display = 'block';
-    } else if (product.productImage) {
-        bannerEl.src = product.productImage; bannerEl.style.display = 'block';
-    } else {
-        bannerEl.style.display = 'none';
-        document.getElementById('banner').style.background = 'linear-gradient(135deg,#1a1a1c 0%,#222225 100%)';
-    }
-
+    if (product.bannerImage) { bannerEl.src=product.bannerImage; bannerEl.style.display='block'; }
+    else if (product.productImage) { bannerEl.src=product.productImage; bannerEl.style.display='block'; }
+    else { bannerEl.style.display='none'; document.getElementById('banner').style.background='linear-gradient(135deg,#1a1a1c,#222225)'; }
     const catEl = document.getElementById('cat-badge');
-    if (product.category) { catEl.textContent = product.category; catEl.style.display = ''; }
-    else { catEl.style.display = 'none'; }
-
-    document.getElementById('prod-name').textContent = product.name || 'Product';
-
-    const cur = product.currency || 'USD';
-    const price = Number(product.sellingPrice) || 0;
-    document.getElementById('price-block').innerHTML = '<span style="font-size:28px;font-weight:800;color:var(--accent)">' + fmtPrice(price, cur) + '</span>';
-
-    if (product.description && product.description.trim()) {
-        const block = document.getElementById('desc-block');
-        block.classList.remove('hidden');
-        const txt = product.description.trim();
-        const lines = txt.split('\n');
-        if (lines.length > 3) {
-            document.getElementById('desc-text').innerHTML = lines.slice(0, 3).join('<br>') + '<span id="desc-more" class="hidden">' + lines.slice(3).join('<br>') + '</span>';
-            document.getElementById('desc-btn').classList.remove('hidden');
-            document.getElementById('desc-btn').textContent = 'Read more';
-            document.getElementById('desc-btn').dataset.open = '0';
-        } else {
-            document.getElementById('desc-text').innerHTML = txt.replace(/\n/g, '<br>');
-            document.getElementById('desc-btn').classList.add('hidden');
-        }
+    if (product.category) { catEl.textContent=product.category; catEl.style.display=''; } else { catEl.style.display='none'; }
+    document.getElementById('prod-name').textContent = product.name||'Product';
+    const cur = product.currency||'USD';
+    const price = Number(product.sellingPrice)||0;
+    document.getElementById('price-block').innerHTML = '<span style="font-size:24px;font-weight:800;color:var(--accent)">'+fmtPrice(price,cur)+'</span>';
+    if (product.description&&product.description.trim()) {
+        const block = document.getElementById('desc-block'); block.classList.remove('hidden');
+        const txt = product.description.trim(); const lines = txt.split('\n');
+        if (lines.length>3) {
+            document.getElementById('desc-text').innerHTML = lines.slice(0,3).join('<br>')+'<span id="desc-more" class="hidden">'+lines.slice(3).join('<br>')+'</span>';
+            document.getElementById('desc-btn').classList.remove('hidden'); document.getElementById('desc-btn').textContent='Read more'; document.getElementById('desc-btn').dataset.open='0';
+        } else { document.getElementById('desc-text').innerHTML = txt.replace(/\n/g,'<br>'); document.getElementById('desc-btn').classList.add('hidden'); }
     }
-
-    if (product.productImage && !product.bannerImage) {
-        document.getElementById('prod-img-block').classList.remove('hidden');
-        document.getElementById('prod-img').src = product.productImage;
-    }
-
-    if (product.footerImage) {
-        document.getElementById('footer-section').classList.remove('hidden');
-        document.getElementById('footer-img').src = product.footerImage;
-    }
-
+    if (product.productImage&&!product.bannerImage) { document.getElementById('prod-img-block').classList.remove('hidden'); document.getElementById('prod-img').src=product.productImage; }
+    if (product.footerImage) { document.getElementById('footer-section').classList.remove('hidden'); document.getElementById('footer-img').src=product.footerImage; }
     renderVariantCards();
-
-    if (product.skuMode === 'off') {
+    if (product.skuMode==='off') {
         document.getElementById('variant-section').classList.add('hidden');
-        selectedVariant = variants[0] || { sku:'', color:'', size:'', stock:999, price: price, weight: Number(product.weightPerUnit)||0, variantImage:'' };
+        selectedVariant = variants[0]||{sku:'',color:'',size:'',stock:999,price:price,weight:Number(product.weightPerUnit)||0,variantImage:''};
     }
 }
 
 function toggleDesc() {
-    const btn = document.getElementById('desc-btn');
-    const more = document.getElementById('desc-more');
-    if (btn.dataset.open === '0') {
-        more.classList.remove('hidden'); btn.textContent = 'Show less'; btn.dataset.open = '1';
-    } else {
-        more.classList.add('hidden'); btn.textContent = 'Read more'; btn.dataset.open = '0';
-    }
+    const btn=document.getElementById('desc-btn'), more=document.getElementById('desc-more');
+    if(btn.dataset.open==='0'){more.classList.remove('hidden');btn.textContent='Show less';btn.dataset.open='1';}
+    else{more.classList.add('hidden');btn.textContent='Read more';btn.dataset.open='0';}
 }
 
 // =============================================
-// VARIANT CARDS
+// VARIANT CARDS — dengan background dari Color Code
 // =============================================
 function renderVariantCards() {
     const container = document.getElementById('variant-cards');
     container.innerHTML = '';
-    if (product.skuMode === 'off') return;
+    if (product.skuMode==='off') return;
     if (!variants.length) {
-        container.innerHTML = '<p style="color:var(--muted);font-size:14px;padding:16px 0">No variants available.</p>';
-        document.getElementById('add-section').style.display = 'none';
-        return;
+        container.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:12px 0">No variants available.</p>';
+        document.getElementById('add-section').style.display='none'; return;
     }
-
-    const hasColors = variants.some(v => v.color && v.color.trim() !== '');
-    const hasSizes = variants.some(v => v.size && v.size.trim() !== '');
-
-    if (hasColors && hasSizes) renderColorSizeMatrix(container);
+    const hasColors = variants.some(v=>v.color&&v.color.trim()!=='');
+    const hasSizes = variants.some(v=>v.size&&v.size.trim()!=='');
+    if (hasColors&&hasSizes) renderColorSizeMatrix(container);
     else if (hasColors) renderColorOnlyCards(container);
     else if (hasSizes) renderSizeOnlyCard(container);
     else renderColorOnlyCards(container);
@@ -606,24 +518,23 @@ function renderVariantCards() {
 function renderColorSizeMatrix(container) {
     const groups = groupByColor();
     const entries = Object.entries(groups);
-    const cols = entries.length === 1 ? 1 : entries.length <= 4 ? 2 : 3;
-    container.className = 'grid grid-cols-1 md:grid-cols-' + cols + ' gap-4';
-
+    const cols = entries.length===1?1:entries.length<=4?2:3;
+    container.className = 'grid grid-cols-1 md:grid-cols-'+cols+' gap-3';
     entries.forEach(([colorName, grp]) => {
         const card = document.createElement('div');
         card.className = 'variant-card';
-        const prices = grp.sizes.map(s => Number(s.price)).filter(p => p > 0);
-        const minP = prices.length ? Math.min(...prices) : Number(product.sellingPrice) || 0;
-        const maxP = prices.length ? Math.max(...prices) : minP;
-        const priceStr = minP === maxP ? fmtPrice(minP) : fmtPrice(minP) + ' – ' + fmtPrice(maxP);
-
-        let html = '<div class="card-head"><div class="flex items-center"><span class="clr-sw" style="background:' + (grp.colorCode||'#888') + '"></span><span class="clr-nm">' + esc(colorName) + '</span></div><span class="card-pr">' + priceStr + '</span></div>';
-        if (grp.image) html += '<div class="card-img"><img src="' + esc(grp.image) + '" alt="' + esc(colorName) + '" loading="lazy"></div>';
+        applyCardBg(card, grp.colorCode); // <-- background card dari colorCode
+        const prices = grp.sizes.map(s=>Number(s.price)).filter(p=>p>0);
+        const minP = prices.length?Math.min(...prices):Number(product.sellingPrice)||0;
+        const maxP = prices.length?Math.max(...prices):minP;
+        const priceStr = minP===maxP?fmtPrice(minP):fmtPrice(minP)+' – '+fmtPrice(maxP);
+        let html = '<div class="card-head"><div class="flex items-center"><span class="clr-sw" style="background:'+(grp.colorCode||'#888')+'"></span><span class="clr-nm">'+esc(colorName)+'</span></div><span class="card-pr">'+priceStr+'</span></div>';
+        if (grp.image) html += '<div class="card-img"><img src="'+esc(grp.image)+'" alt="'+esc(colorName)+'" loading="lazy"></div>';
         html += '<div class="card-sizes">';
         grp.sizes.forEach(s => {
-            const stk = Number(s.stock)||0; const isOos = stk<=0;
-            const showP = minP !== maxP && Number(s.price)>0;
-            html += '<button class="sz-pill' + (isOos?' oos':'') + '" type="button" data-sku="'+esc(s.sku)+'" data-size="'+esc(s.size)+'" data-stock="'+stk+'" data-price="'+(Number(s.price)||0)+'" data-weight="'+(Number(s.weight)||0)+'" data-color="'+esc(colorName)+'" data-colorcode="'+esc(grp.colorCode||'')+'" data-img="'+esc(s.variantImage||'')+'" '+(isOos?'disabled':'')+' aria-label="Size '+s.size+', stock '+stk+'"><span class="sz-lbl">'+esc(s.size)+(showP?'<br>'+fmtPrice(Number(s.price)):'')+'</span><span class="sz-stk">'+(isOos?'Sold out':stk+' left')+'</span></button>';
+            const stk=Number(s.stock)||0; const isOos=stk<=0;
+            const showP = minP!==maxP&&Number(s.price)>0;
+            html += '<button class="sz-pill'+(isOos?' oos':'')+'" type="button" data-sku="'+esc(s.sku)+'" data-size="'+esc(s.size)+'" data-stock="'+stk+'" data-price="'+(Number(s.price)||0)+'" data-weight="'+(Number(s.weight)||0)+'" data-color="'+esc(colorName)+'" data-colorcode="'+esc(grp.colorCode||'')+'" data-img="'+esc(s.variantImage||'')+'" '+(isOos?'disabled':'')+'><span class="sz-lbl">'+esc(s.size)+(showP?'<br>'+fmtPrice(Number(s.price)):'')+'</span><span class="sz-stk">'+(isOos?'Sold out':stk+' left')+'</span></button>';
         });
         html += '</div>';
         card.innerHTML = html;
@@ -635,22 +546,23 @@ function renderColorSizeMatrix(container) {
 }
 
 function renderColorOnlyCards(container) {
-    const cols = variants.length <= 2 ? variants.length : variants.length <= 4 ? 2 : 3;
-    container.className = 'grid grid-cols-1 md:grid-cols-' + cols + ' gap-4';
+    const cols = variants.length<=2?variants.length:variants.length<=4?2:3;
+    container.className = 'grid grid-cols-1 md:grid-cols-'+cols+' gap-3';
     variants.forEach(v => {
-        const stk = Number(v.stock)||0; const isOos = stk<=0;
+        const stk=Number(v.stock)||0; const isOos=stk<=0;
         const card = document.createElement('div');
         card.className = 'variant-card clickable';
-        if (isOos) card.style.opacity = '0.4';
+        if (isOos) card.style.opacity='0.4';
         card.dataset.color = v.color||'Default'; card.dataset.sku = v.sku||'';
+        applyCardBg(card, v.colorCode); // <-- background card dari colorCode
         const price = Number(v.price)||Number(product.sellingPrice)||0;
         let html = '<div class="card-head"><div class="flex items-center"><span class="clr-sw" style="background:'+(v.colorCode||'#888')+'"></span><span class="clr-nm">'+esc(v.color||'Default')+'</span></div><span class="card-pr">'+fmtPrice(price)+'</span></div><div class="card-body-co">';
         if (v.variantImage) html += '<img src="'+esc(v.variantImage)+'" alt="'+esc(v.color)+'" loading="lazy">';
-        html += '<div><div class="stk-info">'+(isOos?'<span style="color:var(--error)">Out of stock</span>':'<i class="fas fa-cube" style="font-size:11px"></i> '+stk+' available')+'</div></div></div>';
+        html += '<div><div class="stk-info">'+(isOos?'<span style="color:var(--error)">Out of stock</span>':'<i class="fas fa-cube" style="font-size:10px"></i> '+stk+' available')+'</div></div></div>';
         card.innerHTML = html;
         container.appendChild(card);
         if (!isOos) card.addEventListener('click', () => {
-            container.querySelectorAll('.variant-card').forEach(c => c.classList.remove('selected'));
+            container.querySelectorAll('.variant-card').forEach(c=>c.classList.remove('selected'));
             card.classList.add('selected');
             selectedVariant = v;
             document.getElementById('qty-input').value = 1;
@@ -662,14 +574,14 @@ function renderSizeOnlyCard(container) {
     container.className = '';
     const card = document.createElement('div');
     card.className = 'variant-card';
-    const prices = variants.map(v => Number(v.price)).filter(p => p > 0);
-    const minP = prices.length ? Math.min(...prices) : Number(product.sellingPrice)||0;
-    const maxP = prices.length ? Math.max(...prices) : minP;
-    const showP = minP !== maxP;
+    const prices = variants.map(v=>Number(v.price)).filter(p=>p>0);
+    const minP = prices.length?Math.min(...prices):Number(product.sellingPrice)||0;
+    const maxP = prices.length?Math.max(...prices):minP;
+    const showP = minP!==maxP;
     let html = '<div class="size-only-head">Select Size</div><div class="card-sizes">';
     variants.forEach(v => {
-        const stk = Number(v.stock)||0; const isOos = stk<=0;
-        html += '<button class="sz-pill'+(isOos?' oos':'')+'" type="button" data-sku="'+esc(v.sku)+'" data-size="'+esc(v.size)+'" data-stock="'+stk+'" data-price="'+(Number(v.price)||0)+'" data-weight="'+(Number(v.weight)||0)+'" data-color="" data-colorcode="" data-img="'+esc(v.variantImage||'')+'" '+(isOos?'disabled':'')+' aria-label="Size '+v.size+', stock '+stk+'"><span class="sz-lbl">'+esc(v.size)+(showP&&Number(v.price)>0?'<br>'+fmtPrice(Number(v.price)):'')+'</span><span class="sz-stk">'+(isOos?'Sold out':stk+' left')+'</span></button>';
+        const stk=Number(v.stock)||0; const isOos=stk<=0;
+        html += '<button class="sz-pill'+(isOos?' oos':'')+'" type="button" data-sku="'+esc(v.sku)+'" data-size="'+esc(v.size)+'" data-stock="'+stk+'" data-price="'+(Number(v.price)||0)+'" data-weight="'+(Number(v.weight)||0)+'" data-color="" data-colorcode="" data-img="'+esc(v.variantImage||'')+'" '+(isOos?'disabled':'')+'><span class="sz-lbl">'+esc(v.size)+(showP&&Number(v.price)>0?'<br>'+fmtPrice(Number(v.price)):'')+'</span><span class="sz-stk">'+(isOos?'Sold out':stk+' left')+'</span></button>';
     });
     html += '</div>';
     card.innerHTML = html;
@@ -680,15 +592,15 @@ function renderSizeOnlyCard(container) {
 }
 
 function selectSizePill(pill, parentCard) {
-    document.querySelectorAll('#variant-cards .sz-pill.sel').forEach(p => p.classList.remove('sel'));
-    document.querySelectorAll('#variant-cards .variant-card.selected').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#variant-cards .sz-pill.sel').forEach(p=>p.classList.remove('sel'));
+    document.querySelectorAll('#variant-cards .variant-card.selected').forEach(c=>c.classList.remove('selected'));
     pill.classList.add('sel');
     parentCard.classList.add('selected');
     selectedVariant = {
-        sku: pill.dataset.sku, color: pill.dataset.color, colorCode: pill.dataset.colorcode,
-        size: pill.dataset.size, stock: parseInt(pill.dataset.stock)||0,
-        price: parseFloat(pill.dataset.price)||0, weight: parseFloat(pill.dataset.weight)||0,
-        variantImage: pill.dataset.img
+        sku:pill.dataset.sku, color:pill.dataset.color, colorCode:pill.dataset.colorcode,
+        size:pill.dataset.size, stock:parseInt(pill.dataset.stock)||0,
+        price:parseFloat(pill.dataset.price)||0, weight:parseFloat(pill.dataset.weight)||0,
+        variantImage:pill.dataset.img
     };
     document.getElementById('qty-input').value = 1;
     if (selectedVariant.variantImage) {
@@ -700,167 +612,136 @@ function selectSizePill(pill, parentCard) {
 function groupByColor() {
     const map = {};
     variants.forEach(v => {
-        const key = v.color && v.color.trim()!=='' ? v.color.trim() : 'Default';
-        if (!map[key]) map[key] = { colorCode: v.colorCode||'', image: v.variantImage||'', sizes: [] };
-        if (!map[key].image && v.variantImage) map[key].image = v.variantImage;
+        const key = v.color&&v.color.trim()!==''?v.color.trim():'Default';
+        if (!map[key]) map[key] = {colorCode:v.colorCode||'',image:v.variantImage||'',sizes:[]};
+        if (!map[key].image&&v.variantImage) map[key].image = v.variantImage;
         map[key].sizes.push(v);
     });
     return map;
 }
 
 // =============================================
-// Cart
+// CART
 // =============================================
 function addToCart() {
     if (!selectedVariant) {
         document.getElementById('variant-section').classList.add('shake');
-        setTimeout(() => document.getElementById('variant-section').classList.remove('shake'), 500);
-        showToast('Please select a variant first', 'err');
-        return;
+        setTimeout(()=>document.getElementById('variant-section').classList.remove('shake'),500);
+        showToast('Please select a variant first','err'); return;
     }
     const qty = parseInt(document.getElementById('qty-input').value)||1;
-    if (selectedVariant.stock > 0 && qty > selectedVariant.stock) { showToast('Only '+selectedVariant.stock+' available', 'err'); return; }
-    const existing = cart.find(c => c.sku === selectedVariant.sku);
+    if (selectedVariant.stock>0&&qty>selectedVariant.stock) { showToast('Only '+selectedVariant.stock+' available','err'); return; }
+    const existing = cart.find(c=>c.sku===selectedVariant.sku);
     if (existing) {
-        const nq = existing.qty + qty;
-        if (selectedVariant.stock > 0 && nq > selectedVariant.stock) { showToast('Max stock reached', 'err'); return; }
-        existing.qty = nq;
+        const nq=existing.qty+qty;
+        if (selectedVariant.stock>0&&nq>selectedVariant.stock) { showToast('Max stock reached','err'); return; }
+        existing.qty=nq;
     } else {
-        cart.push({
-            sku: selectedVariant.sku, color: selectedVariant.color, colorCode: selectedVariant.colorCode,
-            size: selectedVariant.size, qty, unitPrice: selectedVariant.price||Number(product.sellingPrice)||0,
-            weight: selectedVariant.weight||0, variantImage: selectedVariant.variantImage||''
-        });
+        cart.push({sku:selectedVariant.sku,color:selectedVariant.color,colorCode:selectedVariant.colorCode,size:selectedVariant.size,qty,unitPrice:selectedVariant.price||Number(product.sellingPrice)||0,weight:selectedVariant.weight||0,variantImage:selectedVariant.variantImage||''});
     }
     renderCart();
-    showToast('Added to order', 'ok');
+    showToast('Added to order','ok');
 }
 
-function removeFromCart(idx) { cart.splice(idx, 1); renderCart(); }
+function removeFromCart(idx) { cart.splice(idx,1); renderCart(); }
 
 function renderCart() {
-    const emptyEl = document.getElementById('cart-empty');
-    const itemsEl = document.getElementById('cart-items');
-    const totalsEl = document.getElementById('cart-totals');
-    const submitBtn = document.getElementById('submit-btn');
-    if (!cart.length) {
-        emptyEl.classList.remove('hidden'); itemsEl.classList.add('hidden'); totalsEl.classList.add('hidden'); submitBtn.disabled = true; return;
-    }
-    emptyEl.classList.add('hidden'); itemsEl.classList.remove('hidden'); totalsEl.classList.remove('hidden'); submitBtn.disabled = false;
+    const emptyEl=document.getElementById('cart-empty'), itemsEl=document.getElementById('cart-items'), totalsEl=document.getElementById('cart-totals'), submitBtn=document.getElementById('submit-btn');
+    if (!cart.length) { emptyEl.classList.remove('hidden'); itemsEl.classList.add('hidden'); totalsEl.classList.add('hidden'); submitBtn.disabled=true; return; }
+    emptyEl.classList.add('hidden'); itemsEl.classList.remove('hidden'); totalsEl.classList.remove('hidden'); submitBtn.disabled=false;
     const cur = product.currency||'USD';
-    let html = '', subtotal = 0, totalWeight = 0;
-    cart.forEach((item, i) => {
-        const it = item.unitPrice * item.qty;
-        subtotal += it; totalWeight += item.weight * item.qty;
-        const label = [item.color, item.size].filter(Boolean).join(' / ') || 'Product';
-        const labelFull = item.sku ? label + ' (' + item.sku + ')' : label;
-        html += '<div class="cart-enter flex items-start gap-3 p-3 rounded-xl" style="background:var(--surface)">' +
-            (item.variantImage ? '<img src="'+esc(item.variantImage)+'" class="w-12 h-12 rounded-lg object-cover flex-shrink-0" style="background:var(--card)" alt="">' : '') +
-            '<div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">'+esc(labelFull)+'</p><p class="text-xs mt-1" style="color:var(--muted)">'+fmtPrice(item.unitPrice,cur)+' × '+item.qty+'</p></div>' +
-            '<div class="text-right flex-shrink-0 flex items-center gap-2"><span class="text-sm font-bold">'+fmtPrice(it,cur)+'</span>' +
+    let html='',subtotal=0,totalWeight=0;
+    cart.forEach((item,i) => {
+        const it=item.unitPrice*item.qty; subtotal+=it; totalWeight+=item.weight*item.qty;
+        const label=[item.color,item.size].filter(Boolean).join(' / ')||'Product';
+        const labelFull=item.sku?label+' ('+item.sku+')':label;
+        html += '<div class="cart-enter flex items-start gap-2 p-2 rounded-lg" style="background:var(--surface)">'+
+            (item.variantImage?'<img src="'+esc(item.variantImage)+'" class="w-10 h-10 rounded-lg object-cover flex-shrink-0" style="background:var(--card)" alt="">':'')+
+            '<div class="flex-1 min-w-0"><p class="text-xs font-semibold truncate">'+esc(labelFull)+'</p><p class="text-xs mt-0.5" style="color:var(--muted)">'+fmtPrice(item.unitPrice,cur)+' × '+item.qty+'</p></div>'+
+            '<div class="text-right flex-shrink-0 flex items-center gap-1"><span class="text-xs font-bold">'+fmtPrice(it,cur)+'</span>'+
             '<button class="rm-btn" onclick="removeFromCart('+i+')" aria-label="Remove"><i class="fas fa-times"></i></button></div></div>';
     });
     itemsEl.innerHTML = html;
-    const scKg = Number(product.shippingCostPerKg)||0;
-    const scEx = Number(product.shipExtraPercent)||0;
-    let shipCost = (scKg>0&&totalWeight>0) ? totalWeight*scKg*(1+scEx/100) : 0;
-    const grand = subtotal + shipCost;
-    document.getElementById('t-sub').textContent = fmtPrice(subtotal, cur);
-    document.getElementById('t-ship').textContent = shipCost>0 ? fmtPrice(shipCost, cur) : 'Free';
-    document.getElementById('t-total').textContent = fmtPrice(grand, cur);
+    const scKg=Number(product.shippingCostPerKg)||0, scEx=Number(product.shipExtraPercent)||0;
+    let shipCost=(scKg>0&&totalWeight>0)?totalWeight*scKg*(1+scEx/100):0;
+    const grand=subtotal+shipCost;
+    document.getElementById('t-sub').textContent=fmtPrice(subtotal,cur);
+    document.getElementById('t-ship').textContent=shipCost>0?fmtPrice(shipCost,cur):'Free';
+    document.getElementById('t-total').textContent=fmtPrice(grand,cur);
 }
 
 // =============================================
-// Submit Order
+// SUBMIT ORDER
 // =============================================
 async function submitOrder() {
-    const name = document.getElementById('f-name').value.trim();
-    const phone = document.getElementById('f-phone').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    const country = document.getElementById('f-country').value;
-    const address = document.getElementById('f-addr').value.trim();
-    const formErr = document.getElementById('form-err');
+    const name=document.getElementById('f-name').value.trim();
+    const phone=document.getElementById('f-phone').value.trim();
+    const email=document.getElementById('f-email').value.trim();
+    const country=document.getElementById('f-country').value;
+    const address=document.getElementById('f-addr').value.trim();
+    const formErr=document.getElementById('form-err');
     if (!name||!phone||!country||!address) {
-        formErr.textContent = 'Please fill in all required fields.'; formErr.classList.remove('hidden');
+        formErr.textContent='Please fill in all required fields.'; formErr.classList.remove('hidden');
         document.getElementById('buyer-form').scrollIntoView({behavior:'smooth',block:'center'}); return;
     }
     formErr.classList.add('hidden');
     if (!cart.length) { showToast('Cart is empty','err'); return; }
-
-    const cur = product.currency||'USD';
-    const subtotal = cart.reduce((s,i)=>s+i.unitPrice*i.qty,0);
-    const totalWeight = cart.reduce((s,i)=>s+i.weight*i.qty,0);
-    const scKg = Number(product.shippingCostPerKg)||0;
-    const scEx = Number(product.shipExtraPercent)||0;
-    const shippingCost = (scKg>0&&totalWeight>0) ? totalWeight*scKg*(1+scEx/100) : 0;
-    const grandTotal = subtotal + shippingCost;
-    const orderId = 'NV-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,5).toUpperCase();
-
-    const order = {
-        orderId, date: new Date().toISOString(),
-        buyer: {name,phone,email,country,address},
-        items: cart.map(i=>({sku:i.sku,color:i.color,size:i.size,qty:i.qty,unitPrice:i.unitPrice,weight:i.weight})),
-        subtotal, shippingWeight: Math.round(totalWeight*1000)/1000,
-        shippingCost: Math.round(shippingCost*100)/100, grandTotal: Math.round(grandTotal*100)/100
+    const cur=product.currency||'USD';
+    const subtotal=cart.reduce((s,i)=>s+i.unitPrice*i.qty,0);
+    const totalWeight=cart.reduce((s,i)=>s+i.weight*i.qty,0);
+    const scKg=Number(product.shippingCostPerKg)||0, scEx=Number(product.shipExtraPercent)||0;
+    const shippingCost=(scKg>0&&totalWeight>0)?totalWeight*scKg*(1+scEx/100):0;
+    const grandTotal=subtotal+shippingCost;
+    const orderId='NV-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substring(2,5).toUpperCase();
+    const order={
+        orderId, date:new Date().toISOString(),
+        buyer:{name,phone,email,country,address},
+        items:cart.map(i=>({sku:i.sku,color:i.color,size:i.size,qty:i.qty,unitPrice:i.unitPrice,weight:i.weight})),
+        subtotal, shippingWeight:Math.round(totalWeight*1000)/1000,
+        shippingCost:Math.round(shippingCost*100)/100, grandTotal:Math.round(grandTotal*100)/100
     };
-
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
-
+    const btn=document.getElementById('submit-btn');
+    btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
     try {
-        const res = await fetch(CFG.SCRIPT_URL, {
-            method: 'POST',
-            headers: {'Content-Type':'text/plain;charset=utf-8'},
-            body: JSON.stringify({ action:'saveAndNotify', sheet:SHEET, order, sellerEmail:CFG.SELLER_EMAIL, productTitle:product.name||'Product' })
-        });
-        const text = await res.text();
-        let data;
-        try { data = JSON.parse(text); } catch { throw new Error('Invalid response: ' + text.substring(0,200)); }
-        if (!data.success) throw new Error(data.error||'Server error');
-
-        fetch(CFG.SCRIPT_URL, {
-            method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
-            body: JSON.stringify({action:'trackEvent',sheet:SHEET,event:'purchase',orderId,itemsCount:cart.length,revenue:grandTotal,details:'Order by '+name})
-        }).catch(()=>{});
-
-        document.getElementById('modal-oid').textContent = 'Order ID: ' + orderId;
-        document.getElementById('modal-total').textContent = fmtPrice(grandTotal, cur);
+        const res=await fetch(CFG.SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'saveAndNotify',sheet:SHEET,order,sellerEmail:CFG.SELLER_EMAIL,productTitle:product.name||'Product'})});
+        const text=await res.text();
+        let data; try{data=JSON.parse(text);}catch{throw new Error('Invalid response: '+text.substring(0,200));}
+        if(!data.success) throw new Error(data.error||'Server error');
+        fetch(CFG.SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'trackEvent',sheet:SHEET,event:'purchase',orderId,itemsCount:cart.length,revenue:grandTotal,details:'Order by '+name})}).catch(()=>{});
+        document.getElementById('modal-oid').textContent='Order ID: '+orderId;
+        document.getElementById('modal-total').textContent=fmtPrice(grandTotal,cur);
         document.getElementById('success-modal').classList.add('show');
-        cart = []; selectedVariant = null; renderCart();
+        cart=[]; selectedVariant=null; renderCart();
         document.getElementById('buyer-form').reset();
         document.querySelectorAll('#variant-cards .variant-card.selected').forEach(c=>c.classList.remove('selected'));
         document.querySelectorAll('#variant-cards .sz-pill.sel').forEach(p=>p.classList.remove('sel'));
         if (CFG.PAYPAL_ME) {
-            const pu = CFG.PAYPAL_ME.endsWith('/') ? CFG.PAYPAL_ME + grandTotal.toFixed(2) : CFG.PAYPAL_ME + '/' + grandTotal.toFixed(2);
-            window.open(pu, '_blank');
+            const pu=CFG.PAYPAL_ME.endsWith('/')?CFG.PAYPAL_ME+grandTotal.toFixed(2):CFG.PAYPAL_ME+'/'+grandTotal.toFixed(2);
+            window.open(pu,'_blank');
         }
-    } catch (err) {
-        console.error(err);
-        showToast('Order failed: ' + err.message, 'err');
+    } catch(err) {
+        console.error(err); showToast('Order failed: '+err.message,'err');
     } finally {
-        btn.disabled = cart.length===0;
-        btn.innerHTML = '<i class="fas fa-lock mr-2" style="font-size:14px"></i>Place Order';
+        btn.disabled=cart.length===0;
+        btn.innerHTML='<i class="fas fa-lock mr-2" style="font-size:13px"></i>Place Order';
     }
 }
 
 // =============================================
-// Utilities
+// UTILITIES
 // =============================================
-function fmtPrice(val, currency) {
-    const c = currency||product.currency||'USD';
-    const n = Number(val)||0;
-    try { return new Intl.NumberFormat('en-US',{style:'currency',currency:c,minimumFractionDigits:0,maximumFractionDigits:2}).format(n); }
-    catch { return c+' '+n.toFixed(2); }
+function fmtPrice(val,currency) {
+    const c=currency||product.currency||'USD'; const n=Number(val)||0;
+    try{return new Intl.NumberFormat('en-US',{style:'currency',currency:c,minimumFractionDigits:0,maximumFractionDigits:2}).format(n);}
+    catch{return c+' '+n.toFixed(2);}
 }
-function esc(str) { if(!str) return ''; const d=document.createElement('div'); d.textContent=str; return d.innerHTML; }
+function esc(str){if(!str)return '';const d=document.createElement('div');d.textContent=str;return d.innerHTML;}
 
-let toastTimer = null;
-function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.className = 'toast ' + type;
+let toastTimer=null;
+function showToast(msg,type){
+    const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type;
     clearTimeout(toastTimer);
-    requestAnimationFrame(() => { t.classList.add('show'); toastTimer = setTimeout(()=>t.classList.remove('show'),3000); });
+    requestAnimationFrame(()=>{t.classList.add('show');toastTimer=setTimeout(()=>t.classList.remove('show'),3000);});
 }
 </script>
 </body>
