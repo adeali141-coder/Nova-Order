@@ -34,13 +34,11 @@
         .ld-grid span:nth-child(9){animation-delay:.8s}
         @keyframes ldP{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
 
-        /* Banner — ukuran asli, tanpa crop */
         #banner{position:relative;width:100%;overflow:hidden;background:var(--surface);min-height:120px}
         #banner img{width:100%;height:auto;display:block}
 
         .banner-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(17,17,17,.5) 30%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
 
-        /* ========== VARIANT CARDS ========== */
         .variant-card{background:var(--card);border:2px solid var(--border);border-radius:16px;overflow:hidden;
             transition:all .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
         .variant-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.25);border-color:var(--border-h)}
@@ -91,7 +89,6 @@
         @keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
         .cart-enter{animation:slideIn .25s ease}
 
-        /* ========== ORDER / FORM ========== */
         .order-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
         .fi{width:100%;padding:9px 11px;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;
             color:var(--fg);font-size:13px;font-family:'DM Sans',sans-serif;transition:border-color .2s;outline:none}
@@ -250,9 +247,6 @@ const COUNTRIES = ['United States','United Kingdom','Canada','Australia','German
 let product = null, variants = [], cart = [];
 const SHEET = new URLSearchParams(window.location.search).get('sheet') || 'Long_Sleeve';
 
-// =============================================
-// Init
-// =============================================
 document.addEventListener('DOMContentLoaded', () => {
     const sel = document.getElementById('f-country');
     COUNTRIES.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
@@ -319,15 +313,14 @@ function applyCardBg(card, code) {
     if (c1) card.style.background = 'linear-gradient(155deg,'+c1+' 0%,'+c2+' 35%,var(--card) 100%)';
 }
 
-// Hitung border color yang cocok dengan card bg
 function deriveBorder(hex) {
     if (!hex || hex.length < 4) return '';
     hex = hex.replace('#','');
     if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
     if (hex.length !== 6) return '';
     const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
+    if (isNaN(r)||isNaN(g)||isNaN(b)) return '';
     const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
-    // Warna terang → border gelap; warna gelap → border terang
     if (lum > 0.5) return 'rgba(0,0,0,0.12)';
     return 'rgba(255,255,255,0.08)';
 }
@@ -338,20 +331,36 @@ function deriveSurface(hex) {
     if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
     if (hex.length !== 6) return '';
     const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
+    if (isNaN(r)||isNaN(g)||isNaN(b)) return '';
     const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
     if (lum > 0.5) return 'rgba(0,0,0,0.06)';
     return 'rgba(255,255,255,0.04)';
 }
 
+// DIPERBAIKI: opacity lebih tinggi supaya teks secondary jelas ikut warna font
 function deriveMuted(hex) {
     if (!hex || hex.length < 4) return '';
     hex = hex.replace('#','');
     if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
     if (hex.length !== 6) return '';
     const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
+    if (isNaN(r)||isNaN(g)||isNaN(b)) return '';
     const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
-    if (lum > 0.5) return 'rgba(0,0,0,0.4)';
-    return 'rgba(255,255,255,0.4)';
+    if (lum > 0.5) return 'rgba(0,0,0,0.5)';
+    return 'rgba(255,255,255,0.5)';
+}
+
+// DIPERBAIKI: border hover ikut warna font
+function deriveBorderHover(hex) {
+    if (!hex || hex.length < 4) return '';
+    hex = hex.replace('#','');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    if (hex.length !== 6) return '';
+    const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
+    if (isNaN(r)||isNaN(g)||isNaN(b)) return '';
+    const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
+    if (lum > 0.5) return 'rgba(0,0,0,0.22)';
+    return 'rgba(255,255,255,0.15)';
 }
 
 // =============================================
@@ -384,10 +393,13 @@ async function fetchProduct() {
             const srf = deriveSurface(product.cardBg);
             if (srf) document.documentElement.style.setProperty('--surface', srf);
         }
+        // DIPERBAIKI: cardText juga mengatur --border-h (hover border)
         if (product.cardText) {
             document.documentElement.style.setProperty('--fg', product.cardText);
             const mut = deriveMuted(product.cardText);
             if (mut) document.documentElement.style.setProperty('--muted', mut);
+            const bh = deriveBorderHover(product.cardText);
+            if (bh) document.documentElement.style.setProperty('--border-h', bh);
         }
 
         if (product.gtmId) { const s=document.createElement('script'); s.textContent="(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','"+product.gtmId+"');"; document.head.prepend(s); }
@@ -506,7 +518,7 @@ function renderSizeOnly(container) {
     let h='<div class="size-only-head">Select Size</div>';
     if(img) h+='<div class="card-img"><img src="'+esc(img)+'" alt="Product" loading="lazy"></div>';
     h+='<div class="card-sizes">';
-    variants.forEach(v=>{const stk=Number(v.stock)||0,oos=stk<=0;h+='<button class="sz-pill'+(oos?' oos':'')+'" type="button" data-sku="'+esc(v.sku)+'" data-size="'+esc(v.size)+'" data-stock="'+stk+'" data-price="'+(Number(v.price)||0)+'" data-weight="'+(Number(v.weight)||0)+'" data-img="'+esc(v.variantImage||'')+'" '+(oos?'disabled':'')+'><span class="sz-lbl">'+esc(v.size)+(showP&&Number(v.price)>0?'<br>'+fmtPrice(Number(v.price)):'')+'</span><span class="sz-stk">'+(oos?'Sold out':stk+' left')+'</span></button>';});
+    variants.forEach(v=>{const stk=Number(v.stock)||0,oos=stk<=0;h+='<button class="sz-pill'+(oos?' oos':'')+'" type="button" data-sku="'+esc(v.sku)+'" data-size="'+esc(v.size)+'" data-stock="'+stk+'" data-price="'+(Number(s.price)||0)+'" data-weight="'+(Number(v.weight)||0)+'" data-img="'+esc(v.variantImage||'')+'" '+(oos?'disabled':'')+'><span class="sz-lbl">'+esc(v.size)+(showP&&Number(v.price)>0?'<br>'+fmtPrice(Number(v.price)):'')+'</span><span class="sz-stk">'+(oos?'Sold out':stk+' left')+'</span></button>';});
     h+='</div>'+cardActionsHTML(false);
     card.innerHTML = h; container.appendChild(card);
 }
