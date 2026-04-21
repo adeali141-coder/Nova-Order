@@ -34,19 +34,21 @@
         .ld-grid span:nth-child(9){animation-delay:.8s}
         @keyframes ldP{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
 
-        #banner{position:relative;width:100%;height:40vh;min-height:220px;overflow:hidden;background:var(--surface)}
-        #banner img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease}
-        .banner-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(17,17,17,.4) 40%,transparent 70%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+        /* Banner — ukuran asli, tanpa crop */
+        #banner{position:relative;width:100%;overflow:hidden;background:var(--surface);min-height:120px}
+        #banner img{width:100%;height:auto;display:block}
 
-        /* ========== VARIANT CARDS (self-contained) ========== */
+        .banner-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(17,17,17,.5) 30%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+
+        /* ========== VARIANT CARDS ========== */
         .variant-card{background:var(--card);border:2px solid var(--border);border-radius:16px;overflow:hidden;
-            transition:all .3s cubic-bezier(.4,0,.2,1)}
+            transition:all .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
         .variant-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.25);border-color:var(--border-h)}
         .variant-card.selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 8px 32px var(--accent-glow)}
         .variant-card.clickable{cursor:pointer}
 
         .card-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px}
-        .clr-sw{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.12);flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+        .clr-sw{width:18px;height:18px;border-radius:50%;border:2px solid rgba(128,128,128,.25);flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
         .clr-nm{font-weight:600;font-size:13px;margin-left:7px}
         .card-pr{font-weight:700;font-size:13px;color:var(--accent)}
 
@@ -167,19 +169,14 @@
         </div>
     </header>
 
-    <!-- Full mobile: 1 kolom, desktop 2 kolom -->
     <main class="max-w-7xl mx-auto px-3 sm:px-5 py-4 lg:py-10">
         <div class="grid lg:grid-cols-5 gap-4 lg:gap-10">
-
-            <!-- Kiri: Harga + Deskripsi + Variant Cards -->
             <div class="lg:col-span-3 space-y-3 lg:space-y-6">
                 <div id="price-block"></div>
                 <div id="desc-block" class="hidden">
                     <div id="desc-text" style="color:var(--muted);font-size:12px;line-height:1.6"></div>
                     <button id="desc-btn" class="desc-toggle">Read more</button>
                 </div>
-
-                <!-- Variant Cards Section -->
                 <section id="variant-section">
                     <h2 class="font-bold mb-2" style="font-size:14px">
                         <i class="fas fa-swatchbook mr-1.5" style="color:var(--accent);font-size:13px"></i>Select Variant
@@ -187,11 +184,8 @@
                     <div id="variant-cards"></div>
                 </section>
             </div>
-
-            <!-- Kanan: Order Summary + Form -->
             <div class="lg:col-span-2">
                 <div class="lg:sticky lg:top-4 space-y-3 lg:space-y-5">
-
                     <div class="order-card">
                         <h2 class="font-bold mb-2" style="font-size:14px">
                             <i class="fas fa-receipt mr-1.5" style="color:var(--accent);font-size:13px"></i>Order Summary
@@ -206,7 +200,6 @@
                             <div class="flex justify-between font-bold text-base pt-2" style="border-top:1px solid var(--border)"><span>Total</span><span id="t-total" style="color:var(--accent)"></span></div>
                         </div>
                     </div>
-
                     <div class="order-card">
                         <h2 class="font-bold mb-3" style="font-size:14px">
                             <i class="fas fa-truck mr-1.5" style="color:var(--accent);font-size:13px"></i>Shipping Details
@@ -220,7 +213,6 @@
                             <p id="form-err" class="hidden text-xs" style="color:var(--error)"></p>
                         </form>
                     </div>
-
                     <button class="btn-p" id="submit-btn" disabled style="padding:13px;font-size:14px">
                         <i class="fas fa-lock mr-1.5" style="font-size:12px"></i>Place Order
                     </button>
@@ -229,7 +221,6 @@
             </div>
         </div>
     </main>
-
     <div id="footer-section" class="hidden"><img id="footer-img" src="" alt="" style="width:100%;max-height:120px;object-fit:cover;opacity:.4"></div>
 </div>
 
@@ -254,13 +245,9 @@ const CFG = {
     SELLER_EMAIL: 'novavariety@gmail.com',
     PAYPAL_ME: ''
 };
-
 const COUNTRIES = ['United States','United Kingdom','Canada','Australia','Germany','France','Netherlands','Italy','Spain','Japan','South Korea','Singapore','Malaysia','Thailand','Philippines','Indonesia','India','Saudi Arabia','UAE','Brazil','Mexico','New Zealand','Sweden','Switzerland','Belgium','Poland','Portugal','Ireland','Turkey','South Africa','Nigeria','Argentina','Chile','Vietnam','Hong Kong','Taiwan','Pakistan','Bangladesh','Myanmar','Cambodia','Russia','Egypt','Colombia','Peru','Kenya'];
 
-let product = null;
-let variants = [];
-let cart = [];
-
+let product = null, variants = [], cart = [];
 const SHEET = new URLSearchParams(window.location.search).get('sheet') || 'Long_Sleeve';
 
 // =============================================
@@ -269,95 +256,52 @@ const SHEET = new URLSearchParams(window.location.search).get('sheet') || 'Long_
 document.addEventListener('DOMContentLoaded', () => {
     const sel = document.getElementById('f-country');
     COUNTRIES.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
-
     document.getElementById('submit-btn').addEventListener('click', submitOrder);
     document.getElementById('modal-close').addEventListener('click', () => document.getElementById('success-modal').classList.remove('show'));
     document.getElementById('desc-btn').addEventListener('click', toggleDesc);
 
-    // Event delegation untuk semua interaksi di dalam variant cards
     const vc = document.getElementById('variant-cards');
-
     vc.addEventListener('click', function(e) {
         const card = e.target.closest('.variant-card');
         if (!card) return;
-
-        // Klik size pill
         const pill = e.target.closest('.sz-pill');
         if (pill && !pill.disabled) {
             card.querySelectorAll('.sz-pill.sel').forEach(p => p.classList.remove('sel'));
-            pill.classList.add('sel');
-            card.classList.add('selected');
-            card.dataset.selSku = pill.dataset.sku;
-            card.dataset.selSize = pill.dataset.size;
-            card.dataset.selStock = pill.dataset.stock;
-            card.dataset.selPrice = pill.dataset.price;
-            card.dataset.selWeight = pill.dataset.weight;
-            card.dataset.selImg = pill.dataset.img;
-            if (pill.dataset.img) {
-                const img = card.querySelector('.card-img img');
-                if (img) img.src = pill.dataset.img;
-            }
-            const inp = card.querySelector('.c-qty-in');
-            if (inp) inp.value = 1;
+            pill.classList.add('sel'); card.classList.add('selected');
+            card.dataset.selSku = pill.dataset.sku; card.dataset.selSize = pill.dataset.size;
+            card.dataset.selStock = pill.dataset.stock; card.dataset.selPrice = pill.dataset.price;
+            card.dataset.selWeight = pill.dataset.weight; card.dataset.selImg = pill.dataset.img;
+            if (pill.dataset.img) { const img = card.querySelector('.card-img img'); if (img) img.src = pill.dataset.img; }
+            const inp = card.querySelector('.c-qty-in'); if (inp) inp.value = 1;
             return;
         }
-
-        // Qty minus
-        if (e.target.closest('.c-qty-minus')) {
-            const inp = card.querySelector('.c-qty-in');
-            inp.value = Math.max(1, (parseInt(inp.value) || 1) - 1);
-            return;
-        }
-
-        // Qty plus
-        if (e.target.closest('.c-qty-plus')) {
-            const inp = card.querySelector('.c-qty-in');
-            const mx = cardMax(card);
-            inp.value = Math.min((parseInt(inp.value) || 1) + 1, mx);
-            return;
-        }
-
-        // Add button
-        if (e.target.closest('.c-add') && !e.target.closest('.c-add').disabled) {
-            addFromCard(card);
-            return;
-        }
-
-        // Color-only: klik card untuk select
+        if (e.target.closest('.c-qty-minus')) { const inp = card.querySelector('.c-qty-in'); inp.value = Math.max(1, (parseInt(inp.value)||1)-1); return; }
+        if (e.target.closest('.c-qty-plus')) { const inp = card.querySelector('.c-qty-in'); inp.value = Math.min((parseInt(inp.value)||1)+1, cardMax(card)); return; }
+        if (e.target.closest('.c-add') && !e.target.closest('.c-add').disabled) { addFromCard(card); return; }
         if (card.classList.contains('clickable') && !card.dataset.oos) {
             vc.querySelectorAll('.variant-card.selected').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
-            card.dataset.selSku = card.dataset.sku;
-            card.dataset.selSize = '';
-            card.dataset.selStock = card.dataset.stock;
-            card.dataset.selPrice = card.dataset.price;
-            card.dataset.selWeight = card.dataset.weight;
-            card.dataset.selImg = card.dataset.img;
-            const inp = card.querySelector('.c-qty-in');
-            if (inp) inp.value = 1;
+            card.dataset.selSku = card.dataset.sku; card.dataset.selSize = '';
+            card.dataset.selStock = card.dataset.stock; card.dataset.selPrice = card.dataset.price;
+            card.dataset.selWeight = card.dataset.weight; card.dataset.selImg = card.dataset.img;
+            const inp = card.querySelector('.c-qty-in'); if (inp) inp.value = 1;
         }
     });
-
-    // Validasi qty input manual
     vc.addEventListener('input', function(e) {
         if (e.target.classList.contains('c-qty-in')) {
             const card = e.target.closest('.variant-card');
-            let v = parseInt(e.target.value) || 1;
+            let v = parseInt(e.target.value)||1;
             if (card) v = Math.min(v, cardMax(card));
             e.target.value = Math.max(1, v);
         }
     });
-
     fetchProduct();
 });
 
-function cardMax(card) {
-    const s = parseInt(card.dataset.selStock);
-    return (s && s > 0) ? s : 999;
-}
+function cardMax(card) { const s = parseInt(card.dataset.selStock); return (s && s > 0) ? s : 999; }
 
 // =============================================
-// Hex → RGBA untuk background card
+// Hex → RGBA
 // =============================================
 function hexToRgba(hex, a) {
     if (!hex || hex.length < 4) return '';
@@ -371,8 +315,43 @@ function hexToRgba(hex, a) {
 
 function applyCardBg(card, code) {
     if (!code) return;
-    const c1 = hexToRgba(code, 0.12), c2 = hexToRgba(code, 0.03);
-    if (c1) card.style.background = 'linear-gradient(155deg,'+c1+' 0%,'+c2+' 40%,var(--card) 100%)';
+    const c1 = hexToRgba(code, 0.15), c2 = hexToRgba(code, 0.04);
+    if (c1) card.style.background = 'linear-gradient(155deg,'+c1+' 0%,'+c2+' 35%,var(--card) 100%)';
+}
+
+// Hitung border color yang cocok dengan card bg
+function deriveBorder(hex) {
+    if (!hex || hex.length < 4) return '';
+    hex = hex.replace('#','');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    if (hex.length !== 6) return '';
+    const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
+    const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
+    // Warna terang → border gelap; warna gelap → border terang
+    if (lum > 0.5) return 'rgba(0,0,0,0.12)';
+    return 'rgba(255,255,255,0.08)';
+}
+
+function deriveSurface(hex) {
+    if (!hex || hex.length < 4) return '';
+    hex = hex.replace('#','');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    if (hex.length !== 6) return '';
+    const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
+    const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
+    if (lum > 0.5) return 'rgba(0,0,0,0.06)';
+    return 'rgba(255,255,255,0.04)';
+}
+
+function deriveMuted(hex) {
+    if (!hex || hex.length < 4) return '';
+    hex = hex.replace('#','');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    if (hex.length !== 6) return '';
+    const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
+    const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
+    if (lum > 0.5) return 'rgba(0,0,0,0.4)';
+    return 'rgba(255,255,255,0.4)';
 }
 
 // =============================================
@@ -382,11 +361,10 @@ async function fetchProduct() {
     const st = document.getElementById('loader-status');
     try {
         st.textContent = 'Connecting...';
-        const ctrl = new AbortController();
-        const tid = setTimeout(() => ctrl.abort(), 20000);
+        const ctrl = new AbortController(), tid = setTimeout(() => ctrl.abort(), 20000);
         let res;
-        try { res = await fetch(CFG.SCRIPT_URL + '?sheet=' + encodeURIComponent(SHEET) + '&_t=' + Date.now(), {signal:ctrl.signal}); }
-        catch (e) { clearTimeout(tid); throw e.name==='AbortError' ? {type:'timeout',message:'Timeout 20s'} : {type:'network',message:e.message}; }
+        try { res = await fetch(CFG.SCRIPT_URL+'?sheet='+encodeURIComponent(SHEET)+'&_t='+Date.now(), {signal:ctrl.signal}); }
+        catch(e) { clearTimeout(tid); throw e.name==='AbortError'?{type:'timeout',message:'Timeout 20s'}:{type:'network',message:e.message}; }
         clearTimeout(tid);
         st.textContent = 'Parsing...';
         if (!res.ok) { const t = await res.text().catch(()=>''); throw {type:'http',status:res.status,body:t}; }
@@ -396,19 +374,34 @@ async function fetchProduct() {
         if (!data.product) throw {type:'data',message:'No product data',data};
         st.textContent = 'Rendering...';
         product = data.product; variants = data.variants || [];
-        if (product.bgColor) { document.documentElement.style.setProperty('--bg',product.bgColor); document.body.style.background=product.bgColor; }
+
+        // === Terapkan warna dari sheet ===
+        if (product.bgColor) { document.documentElement.style.setProperty('--bg', product.bgColor); document.body.style.background = product.bgColor; }
+        if (product.cardBg) {
+            document.documentElement.style.setProperty('--card', product.cardBg);
+            const bdr = deriveBorder(product.cardBg);
+            if (bdr) document.documentElement.style.setProperty('--border', bdr);
+            const srf = deriveSurface(product.cardBg);
+            if (srf) document.documentElement.style.setProperty('--surface', srf);
+        }
+        if (product.cardText) {
+            document.documentElement.style.setProperty('--fg', product.cardText);
+            const mut = deriveMuted(product.cardText);
+            if (mut) document.documentElement.style.setProperty('--muted', mut);
+        }
+
         if (product.gtmId) { const s=document.createElement('script'); s.textContent="(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','"+product.gtmId+"');"; document.head.prepend(s); }
         if (product.ga4Id) { const s=document.createElement('script'); s.src='https://www.googletagmanager.com/gtag/js?id='+product.ga4Id; document.head.prepend(s); const s2=document.createElement('script'); s2.textContent="window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','"+product.ga4Id+"');"; document.head.appendChild(s2); }
         renderProduct();
         document.getElementById('loader').classList.add('hide');
         document.getElementById('app').classList.remove('hidden');
-    } catch (err) {
+    } catch(err) {
         let msg='',det='';
-        if(err.type==='timeout'){msg='Server tidak merespon 20 detik. Pastikan deployment aktif.';det='Timeout\n'+CFG.SCRIPT_URL;}
-        else if(err.type==='network'){msg='Gagal terhubung. Pastikan deployment diset "Anyone".';det=err.message;}
+        if(err.type==='timeout'){msg='Server tidak merespon 20 detik.';det='Timeout\n'+CFG.SCRIPT_URL;}
+        else if(err.type==='network'){msg='Gagal terhubung. Pastikan deployment "Anyone".';det=err.message;}
         else if(err.type==='http'){msg='HTTP '+err.status;det=(err.body||'').substring(0,400);}
-        else if(err.type==='parse'){msg='Bukan JSON response. Cek tab Executions di Apps Script.';det=(err.body||'').substring(0,400);}
-        else if(err.type==='server'){msg=err.message;if(msg.includes('Sheet not found'))msg+='\n\nSheet: "'+SHEET+'" — pastikan case-sensitive.';det=JSON.stringify(err.data);}
+        else if(err.type==='parse'){msg='Bukan JSON. Cek Executions di Apps Script.';det=(err.body||'').substring(0,400);}
+        else if(err.type==='server'){msg=err.message;if(msg.includes('Sheet not found'))msg+='\n\nSheet: "'+SHEET+'" — case-sensitive.';det=JSON.stringify(err.data);}
         else{msg=err.message||'Error';det=String(err);}
         document.getElementById('err-msg').textContent=msg;
         document.getElementById('err-code').textContent=det;
@@ -423,7 +416,7 @@ async function testConnection() {
     d.innerHTML='<p style="color:var(--accent);font-size:11px"><i class="fas fa-spinner fa-spin mr-1"></i>Diagnosing...</p>';
     let r=[];
     try{const res=await fetch(CFG.SCRIPT_URL+'?sheet='+encodeURIComponent(SHEET)+'&_t='+Date.now(),{signal:AbortSignal.timeout(15000)});
-    r.push('HTTP '+res.status+' '+res.statusText);const txt=await res.text();try{const j=JSON.parse(txt);r.push(j.success?'OK — success=true, product: '+(j.product?.name||'-')+', variants: '+(j.variants?.length||0):'FAIL — '+j.error);}catch{r.push('FAIL — bukan JSON. First 200: '+txt.substring(0,200));}}catch(e){r.push('FAIL — '+e.message);}
+    r.push('HTTP '+res.status);const txt=await res.text();try{const j=JSON.parse(txt);r.push(j.success?'OK — product: '+(j.product?.name||'-')+', variants: '+(j.variants?.length||0)+', cardBg: '+(j.product?.cardBg||'(default)')+', cardText: '+(j.product?.cardText||'(default)'):'FAIL — '+j.error);}catch{r.push('FAIL — bukan JSON: '+txt.substring(0,150));}}catch(e){r.push('FAIL — '+e.message);}
     r.push('Sheet: "'+SHEET+'"');
     d.innerHTML=r.map(x=>'<p style="font-size:10px;color:var(--muted);margin-bottom:2px">'+x+'</p>').join('');
 }
@@ -435,7 +428,7 @@ function renderProduct() {
     const be = document.getElementById('banner-img');
     if(product.bannerImage){be.src=product.bannerImage;be.style.display='block';}
     else if(product.productImage){be.src=product.productImage;be.style.display='block';}
-    else{be.style.display='none';document.getElementById('banner').style.background='linear-gradient(135deg,#1a1a1c,#222225)';}
+    else{be.style.display='none';document.getElementById('banner').style.display='none';}
     const ce=document.getElementById('cat-badge');if(product.category){ce.textContent=product.category;ce.style.display='';}else{ce.style.display='none';}
     document.getElementById('prod-name').textContent=product.name||'Product';
     const cur=product.currency||'USD', price=Number(product.sellingPrice)||0;
@@ -448,56 +441,39 @@ function renderProduct() {
 function toggleDesc(){const b=document.getElementById('desc-btn'),m=document.getElementById('desc-more');if(b.dataset.open==='0'){m.classList.remove('hidden');b.textContent='Show less';b.dataset.open='1';}else{m.classList.add('hidden');b.textContent='Read more';b.dataset.open='0';}}
 
 // =============================================
-// VARIANT CARDS — Self-Contained
+// VARIANT CARDS
 // =============================================
 function renderVariantCards() {
-    const c = document.getElementById('variant-cards');
-    c.innerHTML = '';
-    if(product.skuMode==='off'){
-        document.getElementById('variant-section').classList.add('hidden');
-        return;
-    }
+    const c = document.getElementById('variant-cards'); c.innerHTML = '';
+    if(product.skuMode==='off'){document.getElementById('variant-section').classList.add('hidden');return;}
     if(!variants.length){c.innerHTML='<p style="color:var(--muted);font-size:12px;padding:10px 0">No variants.</p>';return;}
-    const hc=variants.some(v=>v.color&&v.color.trim()!=='');
-    const hs=variants.some(v=>v.size&&v.size.trim()!=='');
+    const hc=variants.some(v=>v.color&&v.color.trim()!==''), hs=variants.some(v=>v.size&&v.size.trim()!=='');
     if(hc&&hs) renderColorSize(c);
     else if(hc) renderColorOnly(c);
     else if(hs) renderSizeOnly(c);
     else renderColorOnly(c);
 }
 
-// --- Warna + Ukuran ---
 function renderColorSize(container) {
     const groups = groupByColor();
     container.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3';
     Object.entries(groups).forEach(([name, grp]) => {
         const card = document.createElement('div');
         card.className = 'variant-card';
-        card.dataset.color = name;
-        card.dataset.colorcode = grp.colorCode || '';
+        card.dataset.color = name; card.dataset.colorcode = grp.colorCode||'';
         applyCardBg(card, grp.colorCode);
-
         const prices = grp.sizes.map(s=>Number(s.price)).filter(p=>p>0);
-        const mn = prices.length?Math.min(...prices):Number(product.sellingPrice)||0;
-        const mx = prices.length?Math.max(...prices):mn;
-        const ps = mn===mx?fmtPrice(mn):fmtPrice(mn)+' – '+fmtPrice(mx);
-        const showP = mn!==mx;
-
-        let h = '<div class="card-head"><div class="flex items-center"><span class="clr-sw" style="background:'+(grp.colorCode||'#888')+'"></span><span class="clr-nm">'+esc(name)+'</span></div><span class="card-pr">'+ps+'</span></div>';
+        const mn=prices.length?Math.min(...prices):Number(product.sellingPrice)||0, mx=prices.length?Math.max(...prices):mn;
+        const ps=mn===mx?fmtPrice(mn):fmtPrice(mn)+' – '+fmtPrice(mx), showP=mn!==mx;
+        let h='<div class="card-head"><div class="flex items-center"><span class="clr-sw" style="background:'+(grp.colorCode||'#888')+'"></span><span class="clr-nm">'+esc(name)+'</span></div><span class="card-pr">'+ps+'</span></div>';
         if(grp.image) h+='<div class="card-img"><img src="'+esc(grp.image)+'" alt="'+esc(name)+'" loading="lazy"></div>';
         h+='<div class="card-sizes">';
-        grp.sizes.forEach(s=>{
-            const stk=Number(s.stock)||0, oos=stk<=0;
-            h+='<button class="sz-pill'+(oos?' oos':'')+'" type="button" data-sku="'+esc(s.sku)+'" data-size="'+esc(s.size)+'" data-stock="'+stk+'" data-price="'+(Number(s.price)||0)+'" data-weight="'+(Number(s.weight)||0)+'" data-img="'+esc(s.variantImage||'')+'" '+(oos?'disabled':'')+'><span class="sz-lbl">'+esc(s.size)+(showP&&Number(s.price)>0?'<br>'+fmtPrice(Number(s.price)):'')+'</span><span class="sz-stk">'+(oos?'Sold out':stk+' left')+'</span></button>';
-        });
-        h+='</div>';
-        h+=cardActionsHTML(false);
-        card.innerHTML = h;
-        container.appendChild(card);
+        grp.sizes.forEach(s=>{const stk=Number(s.stock)||0,oos=stk<=0;h+='<button class="sz-pill'+(oos?' oos':'')+'" type="button" data-sku="'+esc(s.sku)+'" data-size="'+esc(s.size)+'" data-stock="'+stk+'" data-price="'+(Number(s.price)||0)+'" data-weight="'+(Number(s.weight)||0)+'" data-img="'+esc(s.variantImage||'')+'" '+(oos?'disabled':'')+'><span class="sz-lbl">'+esc(s.size)+(showP&&Number(s.price)>0?'<br>'+fmtPrice(Number(s.price)):'')+'</span><span class="sz-stk">'+(oos?'Sold out':stk+' left')+'</span></button>';});
+        h+='</div>'+cardActionsHTML(false);
+        card.innerHTML = h; container.appendChild(card);
     });
 }
 
-// --- Hanya Warna ---
 function renderColorOnly(container) {
     container.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3';
     variants.forEach(v => {
@@ -505,62 +481,43 @@ function renderColorOnly(container) {
         const card = document.createElement('div');
         card.className = 'variant-card clickable';
         if(oos){card.style.opacity='.35';card.dataset.oos='1';}
-        card.dataset.color = v.color||'Default';
-        card.dataset.colorcode = v.colorCode||'';
-        card.dataset.sku = v.sku||'';
-        card.dataset.stock = stk;
-        card.dataset.price = Number(v.price)||0;
-        card.dataset.weight = Number(v.weight)||0;
-        card.dataset.img = v.variantImage||'';
+        card.dataset.color=v.color||'Default'; card.dataset.colorcode=v.colorCode||'';
+        card.dataset.sku=v.sku||''; card.dataset.stock=stk;
+        card.dataset.price=Number(v.price)||0; card.dataset.weight=Number(v.weight)||0;
+        card.dataset.img=v.variantImage||'';
         applyCardBg(card, v.colorCode);
-        const price = Number(v.price)||Number(product.sellingPrice)||0;
-        let h = '<div class="card-head"><div class="flex items-center"><span class="clr-sw" style="background:'+(v.colorCode||'#888')+'"></span><span class="clr-nm">'+esc(v.color||'Default')+'</span></div><span class="card-pr">'+fmtPrice(price)+'</span></div>';
+        const price=Number(v.price)||Number(product.sellingPrice)||0;
+        let h='<div class="card-head"><div class="flex items-center"><span class="clr-sw" style="background:'+(v.colorCode||'#888')+'"></span><span class="clr-nm">'+esc(v.color||'Default')+'</span></div><span class="card-pr">'+fmtPrice(price)+'</span></div>';
         if(v.variantImage) h+='<div class="card-img"><img src="'+esc(v.variantImage)+'" alt="'+esc(v.color)+'" loading="lazy"></div>';
         h+='<div class="card-stk"><i class="fas fa-cube" style="font-size:9px"></i> '+(oos?'<span style="color:var(--error)">Out of stock</span>':stk+' available')+'</div>';
         h+=cardActionsHTML(oos);
-        card.innerHTML = h;
-        container.appendChild(card);
+        card.innerHTML = h; container.appendChild(card);
     });
 }
 
-// --- Hanya Ukuran ---
 function renderSizeOnly(container) {
     container.className = '';
     const card = document.createElement('div');
     card.className = 'variant-card';
-    card.dataset.color = '';
-    card.dataset.colorcode = '';
+    card.dataset.color=''; card.dataset.colorcode='';
     const prices=variants.map(v=>Number(v.price)).filter(p=>p>0);
-    const mn=prices.length?Math.min(...prices):Number(product.sellingPrice)||0;
-    const mx=prices.length?Math.max(...prices):mn;
-    const showP=mn!==mx;
-    const img = product.productImage||(variants.find(v=>v.variantImage)||{}).variantImage||'';
+    const mn=prices.length?Math.min(...prices):Number(product.sellingPrice)||0, mx=prices.length?Math.max(...prices):mn, showP=mn!==mx;
+    const img=product.productImage||(variants.find(v=>v.variantImage)||{}).variantImage||'';
     let h='<div class="size-only-head">Select Size</div>';
     if(img) h+='<div class="card-img"><img src="'+esc(img)+'" alt="Product" loading="lazy"></div>';
     h+='<div class="card-sizes">';
-    variants.forEach(v=>{
-        const stk=Number(v.stock)||0,oos=stk<=0;
-        h+='<button class="sz-pill'+(oos?' oos':'')+'" type="button" data-sku="'+esc(v.sku)+'" data-size="'+esc(v.size)+'" data-stock="'+stk+'" data-price="'+(Number(v.price)||0)+'" data-weight="'+(Number(v.weight)||0)+'" data-img="'+esc(v.variantImage||'')+'" '+(oos?'disabled':'')+'><span class="sz-lbl">'+esc(v.size)+(showP&&Number(v.price)>0?'<br>'+fmtPrice(Number(v.price)):'')+'</span><span class="sz-stk">'+(oos?'Sold out':stk+' left')+'</span></button>';
-    });
-    h+='</div>';
-    h+=cardActionsHTML(false);
-    card.innerHTML = h;
-    container.appendChild(card);
+    variants.forEach(v=>{const stk=Number(v.stock)||0,oos=stk<=0;h+='<button class="sz-pill'+(oos?' oos':'')+'" type="button" data-sku="'+esc(v.sku)+'" data-size="'+esc(v.size)+'" data-stock="'+stk+'" data-price="'+(Number(v.price)||0)+'" data-weight="'+(Number(v.weight)||0)+'" data-img="'+esc(v.variantImage||'')+'" '+(oos?'disabled':'')+'><span class="sz-lbl">'+esc(v.size)+(showP&&Number(v.price)>0?'<br>'+fmtPrice(Number(v.price)):'')+'</span><span class="sz-stk">'+(oos?'Sold out':stk+' left')+'</span></button>';});
+    h+='</div>'+cardActionsHTML(false);
+    card.innerHTML = h; container.appendChild(card);
 }
 
-// Template footer actions (qty + add)
 function cardActionsHTML(disabled) {
     return '<div class="card-actions"><div class="flex items-center gap-1"><button type="button" class="c-qty-btn c-qty-minus" aria-label="Minus" '+(disabled?'disabled':'')+'>−</button><input type="number" class="c-qty-in" value="1" min="1" aria-label="Qty" '+(disabled?'disabled':'')+'><button type="button" class="c-qty-btn c-qty-plus" aria-label="Plus" '+(disabled?'disabled':'')+'>+</button></div><button type="button" class="c-add" '+(disabled?'disabled':'')+'>'+(disabled?'Sold Out':'<i class="fas fa-cart-plus" style="font-size:11px"></i> Add')+'</button></div>';
 }
 
 function groupByColor() {
     const m={};
-    variants.forEach(v=>{
-        const k=v.color&&v.color.trim()?v.color.trim():'Default';
-        if(!m[k]) m[k]={colorCode:v.colorCode||'',image:v.variantImage||'',sizes:[]};
-        if(!m[k].image&&v.variantImage) m[k].image=v.variantImage;
-        m[k].sizes.push(v);
-    });
+    variants.forEach(v=>{const k=v.color&&v.color.trim()?v.color.trim():'Default';if(!m[k])m[k]={colorCode:v.colorCode||'',image:v.variantImage||'',sizes:[]};if(!m[k].image&&v.variantImage)m[k].image=v.variantImage;m[k].sizes.push(v);});
     return m;
 }
 
@@ -569,52 +526,34 @@ function groupByColor() {
 // =============================================
 function addFromCard(card) {
     const hasPills = card.querySelectorAll('.sz-pill').length > 0;
-    if(hasPills && !card.dataset.selSku){
-        card.classList.add('shake');
-        setTimeout(()=>card.classList.remove('shake'),400);
-        showToast('Select a size first','err'); return;
-    }
-    if(!card.dataset.selSku){
-        card.classList.add('shake');
-        setTimeout(()=>card.classList.remove('shake'),400);
-        showToast('Select a variant','err'); return;
-    }
-    const qty = parseInt(card.querySelector('.c-qty-in').value)||1;
-    const stock = parseInt(card.dataset.selStock)||0;
+    if(hasPills && !card.dataset.selSku){card.classList.add('shake');setTimeout(()=>card.classList.remove('shake'),400);showToast('Select a size first','err');return;}
+    if(!card.dataset.selSku){card.classList.add('shake');setTimeout(()=>card.classList.remove('shake'),400);showToast('Select a variant','err');return;}
+    const qty=parseInt(card.querySelector('.c-qty-in').value)||1, stock=parseInt(card.dataset.selStock)||0;
     if(stock>0&&qty>stock){showToast('Only '+stock+' available','err');return;}
-    const sku=card.dataset.selSku, color=card.dataset.color, colorCode=card.dataset.colorcode,
-          size=card.dataset.selSize||'', up=parseFloat(card.dataset.selPrice)||Number(product.sellingPrice)||0,
-          wt=parseFloat(card.dataset.selWeight)||0, img=card.dataset.selImg||'';
+    const sku=card.dataset.selSku,color=card.dataset.color,colorCode=card.dataset.colorcode,
+          size=card.dataset.selSize||'',up=parseFloat(card.dataset.selPrice)||Number(product.sellingPrice)||0,
+          wt=parseFloat(card.dataset.selWeight)||0,img=card.dataset.selImg||'';
     const ex=cart.find(c=>c.sku===sku);
     if(ex){const nq=ex.qty+qty;if(stock>0&&nq>stock){showToast('Max stock reached','err');return;}ex.qty=nq;}
     else cart.push({sku,color,colorCode,size,qty,unitPrice:up,weight:wt,variantImage:img});
-    card.classList.add('card-added');
-    setTimeout(()=>card.classList.remove('card-added'),500);
+    card.classList.add('card-added');setTimeout(()=>card.classList.remove('card-added'),500);
     card.querySelector('.c-qty-in').value=1;
-    renderCart();
-    showToast('Added to order','ok');
+    renderCart(); showToast('Added to order','ok');
 }
 
 // =============================================
 // Cart
 // =============================================
 function removeFromCart(i){cart.splice(i,1);renderCart();}
-
 function renderCart() {
     const em=document.getElementById('cart-empty'),it=document.getElementById('cart-items'),to=document.getElementById('cart-totals'),sb=document.getElementById('submit-btn');
     if(!cart.length){em.classList.remove('hidden');it.classList.add('hidden');to.classList.add('hidden');sb.disabled=true;return;}
     em.classList.add('hidden');it.classList.remove('hidden');to.classList.remove('hidden');sb.disabled=false;
     const cur=product.currency||'USD';let h='',sub=0,tw=0;
-    cart.forEach((item,i)=>{
-        const t=item.unitPrice*item.qty;sub+=t;tw+=item.weight*item.qty;
-        const lb=[item.color,item.size].filter(Boolean).join(' / ')||'Product';
-        const lf=item.sku?lb+' ('+item.sku+')':lb;
-        h+='<div class="cart-enter flex items-center gap-2 p-2 rounded-lg" style="background:var(--surface)">'+(item.variantImage?'<img src="'+esc(item.variantImage)+'" class="w-9 h-9 rounded-lg object-cover flex-shrink-0" style="background:var(--card)" alt="">':'')+'<div class="flex-1 min-w-0"><p class="text-xs font-semibold truncate">'+esc(lf)+'</p><p class="text-xs" style="color:var(--muted);font-size:10px">'+fmtPrice(item.unitPrice,cur)+' x '+item.qty+'</p></div><div class="flex items-center gap-1 flex-shrink-0"><span class="text-xs font-bold">'+fmtPrice(t,cur)+'</span><button class="rm-btn" onclick="removeFromCart('+i+')" aria-label="Remove"><i class="fas fa-times"></i></button></div></div>';
-    });
+    cart.forEach((item,i)=>{const t=item.unitPrice*item.qty;sub+=t;tw+=item.weight*item.qty;const lb=[item.color,item.size].filter(Boolean).join(' / ')||'Product';const lf=item.sku?lb+' ('+item.sku+')':lb;h+='<div class="cart-enter flex items-center gap-2 p-2 rounded-lg" style="background:var(--surface)">'+(item.variantImage?'<img src="'+esc(item.variantImage)+'" class="w-9 h-9 rounded-lg object-cover flex-shrink-0" style="background:var(--card)" alt="">':'')+'<div class="flex-1 min-w-0"><p class="text-xs font-semibold truncate">'+esc(lf)+'</p><p style="color:var(--muted);font-size:10px">'+fmtPrice(item.unitPrice,cur)+' x '+item.qty+'</p></div><div class="flex items-center gap-1 flex-shrink-0"><span class="text-xs font-bold">'+fmtPrice(t,cur)+'</span><button class="rm-btn" onclick="removeFromCart('+i+')" aria-label="Remove"><i class="fas fa-times"></i></button></div></div>';});
     it.innerHTML=h;
     const sk=Number(product.shippingCostPerKg)||0,se=Number(product.shipExtraPercent)||0;
-    let sc=(sk>0&&tw>0)?tw*sk*(1+se/100):0;
-    const gr=sub+sc;
+    let sc=(sk>0&&tw>0)?tw*sk*(1+se/100):0;const gr=sub+sc;
     document.getElementById('t-sub').textContent=fmtPrice(sub,cur);
     document.getElementById('t-ship').textContent=sc>0?fmtPrice(sc,cur):'Free';
     document.getElementById('t-total').textContent=fmtPrice(gr,cur);
