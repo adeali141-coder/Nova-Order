@@ -120,7 +120,8 @@
             display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s}
         .modal-ov.show{opacity:1;pointer-events:all}
         .modal-ct{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;
-            max-width:400px;width:100%;transform:scale(.9);transition:transform .3s;text-align:center}
+            max-width:440px;width:100%;transform:scale(.9);transition:transform .3s;text-align:center;
+            max-height:90vh;overflow-y:auto}
         .modal-ov.show .modal-ct{transform:scale(1)}
 
         .desc-toggle{cursor:pointer;color:var(--accent);font-size:11px;font-weight:600;border:none;background:none;
@@ -130,6 +131,12 @@
         .err-box{background:rgba(127,29,29,.15);border:1px solid rgba(248,113,113,.3);border-radius:10px;padding:14px;margin-top:10px;text-align:left}
         .err-box code{display:block;margin-top:6px;padding:8px;background:rgba(0,0,0,.4);border-radius:6px;
             font-size:10px;color:#fca5a5;word-break:break-all;font-family:monospace;white-space:pre-wrap;line-height:1.4}
+
+        /* Data pembeli di modal */
+        .buyer-info-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:left;margin:12px 0}
+        .buyer-info-row{display:flex;gap:8px;font-size:11px;line-height:1.5}
+        .buyer-info-label{color:var(--muted);min-width:70px;flex-shrink:0}
+        .buyer-info-value{color:var(--fg);word-break:break-word}
 
         ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}
         ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -224,25 +231,38 @@
     <div id="footer-section" class="hidden"><img id="footer-img" src="" alt="" style="width:100%;max-height:120px;object-fit:cover;opacity:.4"></div>
 </div>
 
-<!-- ===== MODAL SUKSES — font teks konfirmasi ikut Card Text ===== -->
+<!-- ===== MODAL SUKSES — dengan data pembeli lengkap ===== -->
 <div id="success-modal" class="modal-ov">
     <div class="modal-ct">
-        <div class="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-content-center" style="background:rgba(52,211,153,.15)">
-            <i class="fas fa-check text-lg" style="color:var(--success)"></i>
+        <div class="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center" style="background:rgba(52,211,153,.15)">
+            <i class="fas fa-check text-xl" style="color:var(--success)"></i>
         </div>
-        <h2 class="text-lg font-bold mb-1">Order Placed</h2>
-        <p id="modal-oid" class="text-xs mb-1" style="color:var(--fg)"></p>
-        <p id="modal-total" class="text-lg font-bold mb-4" style="color:var(--accent)"></p>
+        <h2 class="text-lg font-bold mb-1">Order Placed Successfully</h2>
+        
+        <!-- Order ID & Nominal -->
+        <div style="background:var(--surface);border-radius:10px;padding:12px;margin:12px 0">
+            <p id="modal-oid" class="text-xs font-mono" style="color:var(--accent)"></p>
+            <p id="modal-total" class="text-xl font-bold mt-1" style="color:var(--accent)"></p>
+        </div>
 
-        <!-- FIX: warna font teks konfirmasi ikut Card Text, bukan muted -->
-        <p class="text-xs mb-4" style="color:var(--fg);line-height:1.5">Complete payment via the PayPal link.<br>Confirmation email has been sent.</p>
+        <!-- Data Pembeli -->
+        <div class="buyer-info-box">
+            <p class="text-xs font-semibold mb-2" style="color:var(--accent)">
+                <i class="fas fa-user mr-1"></i>Buyer Information
+            </p>
+            <div class="buyer-info-row"><span class="buyer-info-label">Name</span><span class="buyer-info-value" id="modal-name"></span></div>
+            <div class="buyer-info-row"><span class="buyer-info-label">Phone</span><span class="buyer-info-value" id="modal-phone"></span></div>
+            <div class="buyer-info-row" id="modal-email-row" style="display:none"><span class="buyer-info-label">Email</span><span class="buyer-info-value" id="modal-email"></span></div>
+            <div class="buyer-info-row"><span class="buyer-info-label">Country</span><span class="buyer-info-value" id="modal-country"></span></div>
+            <div class="buyer-info-row"><span class="buyer-info-label">Address</span><span class="buyer-info-value" id="modal-addr"></span></div>
+        </div>
 
-        <!-- FIX: tombol Complete Payment yang buka PayPal, bukan redirect otomatis -->
-        <button id="complete-pay-btn" class="btn-complete" style="display:none;margin-bottom:8px" onclick="completePayment()">
+        <p class="text-xs mb-4" style="color:var(--muted);line-height:1.5">Complete payment via PayPal button below.<br>Confirmation email has been sent.</p>
+
+        <!-- HANYA button Complete Payment — Done sudah dihapus -->
+        <button id="complete-pay-btn" class="btn-complete" onclick="completePayment()">
             <i class="fab fa-paypal mr-2"></i>Complete Payment
         </button>
-
-        <button class="btn-p" id="modal-close" style="width:auto;display:inline-block;padding:10px 32px;font-size:13px">Done</button>
     </div>
 </div>
 
@@ -253,27 +273,21 @@
 // KONFIGURASI
 // =============================================
 
-// >>> GANTI dengan link PayPal.Me yang benar jika sudah ada <<<
-// Format: 'https://paypal.me/nama-toko/jumlah-mata-uang'
-// Contoh: 'https://paypal.me/novavariety/25USD'
-// Kalau belum punya link PayPal.Me, biarkan kosong seperti di bawah agar
-// form tidak redirect ke halaman login PayPal
 const CFG = {
     SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzpj6MdFIKB3NviKkZ-AQhkEUKY_Utxdga6COXsyPadqBOUZdnXhZ-lMCEzvYN630UyQg/exec',
     SELLER_EMAIL: 'novavariety@hotmail.com',
-    PAYPAL_ME: 'https://paypal.me/novavariety'  // ← GANTI di sini kalau sudah punya link PayPal.Me
+    PAYPAL_ME: 'https://paypal.me/novavariety'
 };
 
 const COUNTRIES = ['United States','United Kingdom','Canada','Australia','Germany','France','Netherlands','Italy','Spain','Japan','South Korea','Singapore','Malaysia','Thailand','Philippines','Indonesia','India','Saudi Arabia','UAE','Brazil','Mexico','New Zealand','Sweden','Switzerland','Belgium','Poland','Portugal','Ireland','Turkey','South Africa','Nigeria','Argentina','Chile','Vietnam','Hong Kong','Taiwan','Pakistan','Bangladesh','Myanmar','Cambodia','Russia','Egypt','Colombia','Peru','Kenya'];
 
-let product = null, variants = [], cart = [], lastOrderId = '';
+let product = null, variants = [], cart = [], lastOrderId = '', lastGrandTotal = 0, lastCurrency = 'USD', lastBuyerData = null;
 const SHEET = new URLSearchParams(window.location.search).get('sheet') || 'Long_Sleeve';
 
 document.addEventListener('DOMContentLoaded', () => {
     const sel = document.getElementById('f-country');
     COUNTRIES.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
     document.getElementById('submit-btn').addEventListener('click', submitOrder);
-    document.getElementById('modal-close').addEventListener('click', closeModal);
     document.getElementById('desc-btn').addEventListener('click', toggleDesc);
 
     const vc = document.getElementById('variant-cards');
@@ -317,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function cardMax(card) { const s = parseInt(card.dataset.selStock); return (s && s > 0) ? s : 999; }
 
 // =============================================
-// FIX IMG URL — GitHub & Google Drive auto-fix
+// FIX IMG URL
 // =============================================
 function fixImg(url) {
     if (!url || typeof url !== 'string') return '';
@@ -348,9 +362,7 @@ function applyCardBg(card, code) {
 function deriveBorder(hex) {
     if (!hex || hex.length < 4) return '';
     hex = hex.replace('#',''); if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2]; if (hex.length !== 6) return '';
-    const r = parseInt(hex.substring(0,2),16),
-      g = parseInt(hex.substring(2,4),16),
-      b = parseInt(hex.substring(4,6),16);
+    const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
     if(isNaN(r)||isNaN(g)||isNaN(b)) return '';
     return (0.299*r+0.587*g+0.114*b)/255>0.5?'rgba(0,0,0,0.12)':'rgba(255,255,255,0.08)';
 }
@@ -358,9 +370,7 @@ function deriveBorder(hex) {
 function deriveSurface(hex) {
     if (!hex || hex.length < 4) return '';
     hex = hex.replace('#',''); if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2]; if (hex.length !== 6) return '';
-    const r = parseInt(hex.substring(0,2),16),
-      g = parseInt(hex.substring(2,4),16),
-      b = parseInt(hex.substring(4,6),16);
+    const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
     if(isNaN(r)||isNaN(g)||isNaN(b)) return '';
     return (0.299*r+0.587*g+0.114*b)/255>0.5?'rgba(0,0,0,0.06)':'rgba(255,255,255,0.04)';
 }
@@ -368,9 +378,7 @@ function deriveSurface(hex) {
 function deriveMuted(hex) {
     if (!hex || hex.length < 4) return '';
     hex = hex.replace('#',''); if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2]; if (hex.length !== 6) return '';
-    const r = parseInt(hex.substring(0,2),16),
-      g = parseInt(hex.substring(2,4),16),
-      b = parseInt(hex.substring(4,6),16);
+    const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
     if(isNaN(r)||isNaN(g)||isNaN(b)) return '';
     return (0.299*r+0.587*g+0.114*b)/255>0.5?'rgba(0,0,0,0.5)':'rgba(255,255,255,0.5)';
 }
@@ -378,9 +386,7 @@ function deriveMuted(hex) {
 function deriveBorderHover(hex) {
     if (!hex || hex.length < 4) return '';
     hex = hex.replace('#',''); if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2]; if (hex.length !== 6) return '';
-    const r = parseInt(hex.substring(0,2),16),
-      g = parseInt(hex.substring(2,4),16),
-      b = parseInt(hex.substring(4,6),16);
+    const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
     if(isNaN(r)||isNaN(g)||isNaN(b)) return '';
     return (0.299*r+0.587*g+0.114*b)/255>0.5?'rgba(0,0,0,0.22)':'rgba(255,255,255,0.15)';
 }
@@ -535,7 +541,7 @@ function renderSizeOnly(container) {
     let h='<div class="size-only-head">Select Size</div>';
     if(img) h+='<div class="card-img"><img src="'+img+'" alt="Product" loading="lazy"></div>';
     h+='<div class="card-sizes">';
-    variants.forEach(v=>{const stk=Number(v.stock)||0,oos=stk<=0;h+='<button class="sz-pill'+(oos?' oos':'')+'" type="button" data-sku="'+esc(v.sku)+'" data-size="'+esc(v.size)+'" data-stock="'+stk+'" data-price="'+(Number(v.price)||0)+'" data-weight="'+(Number(v.weight)||0)+'" data-img="'+fixImg(esc(v.variantImage||''))+'" '+(oos?'disabled':'')+'><span class="sz-lbl">'+esc(v.size)+(showP&&Number(v.price)>0?'<br>'+fmtPrice(Number(v.price)):'')+'</span><span class="sz-stk">'+(oos?'Sold out':stk+' left')+'</span></button>';});
+    variants.forEach(v=>{const stk=Number(v.stock)||0,oos=stk<=0;h+='<button class="sz-pill'+(oos?' oos':'')+'" type="button" data-sku="'+esc(v.sku)+'" data-size="'+esc(v.size)+'" data-stock="'+stk+'" data-price="'+(Number(v.price)||0)+'" data-weight="'+(Number(v.weight)||0)+'" data-img="'+fixImg(esc(v.variantImage||''))+'" '+(oos?'disabled':'')+'><span class="sz-lbl">'+esc(v.size)+(showP&&Number(v.price)>0?'<br>'+fmtPrice(Number(s.price)):'')+'</span><span class="sz-stk">'+(oos?'Sold out':stk+' left')+'</span></button>';});
     h+='</div>'+cardActionsHTML(false);
     card.innerHTML = h; container.appendChild(card);
 }
@@ -579,7 +585,7 @@ function renderCart() {
     if(!cart.length){em.classList.remove('hidden');it.classList.add('hidden');to.classList.add('hidden');sb.disabled=true;return;}
     em.classList.add('hidden');it.classList.remove('hidden');to.classList.remove('hidden');sb.disabled=false;
     const cur=product.currency||'USD';let h='',sub=0,tw=0;
-    cart.forEach((item,i)=>{const t=item.unitPrice*item.qty;sub+=t;tw+=item.weight*item.qty;const lb=[item.color,item.size].filter(Boolean).join(' / ')||'Product';const lf=item.sku?lb+' ('+item.sku+')':lb;h+='<div class="cart-enter flex items-center gap-2 p-2 rounded-lg" style="background:var(--surface)">'+(item.variantImage?'<img src="'+fixImg(item.variantImage)+'" class="w-9 h-9 rounded-lg object-cover flex-shrink-0" style="background:var(--card)" alt="">':'')+'<div class="flex-1 min-w-0"><p class="text-xs font-semibold truncate">'+esc(lf)+'</p><p style="color:var(--muted);font-size:10px">'+fmtPrice(item.unitPrice,cur)+' x '+item.qty+'</p></div><div class="flex items-center gap-1 flex-shrink-0"><span class="text-xs font-bold">'+fmtPrice(t,cur)+'</span><button class="rm-btn" onclick="removeFromCart('+i+')" aria-label="Remove"><i class="fas fa-times"></i></button></div></div></div>';});
+    cart.forEach((item,i)=>{const t=item.unitPrice*item.qty;sub+=t;tw+=item.weight*item.qty;const lb=[item.color,item.size].filter(Boolean).join(' / ')||'Product';const lf=item.sku?lb+' ('+item.sku+')':lb;h+='<div class="cart-enter flex items-center gap-2 p-2 rounded-lg" style="background:var(--surface)">'+(item.variantImage?'<img src="'+fixImg(item.variantImage)+'" class="w-9 h-9 rounded-lg object-cover flex-shrink-0" style="background:var(--card)" alt="">':'')+'<div class="flex-1 min-w-0"><p class="text-xs font-semibold truncate">'+esc(lf)+'</p><p style="color:var(--muted);font-size:10px">'+fmtPrice(item.unitPrice,cur)+' x '+item.qty+'</p></div><div class="flex items-center gap-1 flex-shrink-0"><span class="text-xs font-bold">'+fmtPrice(t,cur)+'</span><button class="rm-btn" onclick="removeFromCart('+i+')" aria-label="Remove"><i class="fas fa-times"></i></button></div></div>';});
     it.innerHTML=h;
     const sk=Number(product.shippingCostPerKg)||0,se=Number(product.shipExtraPercent)||0;
     let sc=(sk>0&&tw>0)?tw*sk*(1+se/100):0;const gr=sub+sc;
@@ -589,7 +595,7 @@ function renderCart() {
 }
 
 // =============================================
-// Submit Order — FIX: redirect ke PayPal HANYA setelah modal sukses muncul
+// Submit Order
 // =============================================
 async function submitOrder() {
     const n=document.getElementById('f-name').value.trim(),ph=document.getElementById('f-phone').value.trim(),
@@ -603,6 +609,10 @@ async function submitOrder() {
           sc=(sk>0&&tw>0)?tw*sk*(1+se/100):0,gt=sub+sc,
           oid='NV-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substring(2,5).toUpperCase();
     lastOrderId = oid;
+    lastGrandTotal = gt;
+    lastCurrency = cur;
+    lastBuyerData = { name: n, phone: ph, email: em, country: co, address: ad };
+    
     const order={orderId:oid,date:new Date().toISOString(),buyer:{name:n,phone:ph,email:em,country:co,address:ad},
           items:cart.map(i=>({sku:i.sku,color:i.color,size:i.size,qty:i.qty,unitPrice:i.unitPrice,weight:i.weight})),
           subtotal:sub,shippingWeight:Math.round(tw*1000)/1000,shippingCost:Math.round(sc*100)/100,grandTotal:Math.round(gt*100)/100};
@@ -615,17 +625,13 @@ async function submitOrder() {
         // Track event
         fetch(CFG.SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'trackEvent',sheet:SHEET,event:'purchase',orderId:oid,itemsCount:cart.length,revenue:gt,details:'Order by '+n})}).catch(()=>{});
 
-        // TAMPILKAN MODAL SUKSES — pastikan tampil dulu, JANGAN redirect otomatis
-        document.getElementById('modal-oid').textContent='Order ID: '+oid;
-        document.getElementById('modal-total').textContent=fmtPrice(gt,cur);
-        showSuccessModal();
-
-        // JIKA PAYPAL_ME diisi, tampilkan tombol Complete Payment
-        if(CFG.PAYPAL_ME){
-            document.getElementById('complete-pay-btn').style.display='inline-block';
-        }else{
-            document.getElementById('complete-pay-btn').style.display='none';
-        }
+        // Tampilkan modal sukses dengan data lengkap
+        showSuccessModal(oid, gt, cur, lastBuyerData);
+        
+        // Reset form & cart
+        cart = [];
+        renderCart();
+        document.getElementById('buyer-form').reset();
     }catch(e){
         console.error(e);showToast('Failed: '+e.message,'err');
     }finally{
@@ -635,36 +641,47 @@ async function submitOrder() {
 }
 
 // =============================================
-// Close modal — JIKA PayPal.Me kosong → langsung tutup, JIKA ada → buka PayPal dulu baru tutup
+// Tampilkan modal sukses dengan data pembeli
 // =============================================
-function closeModal() {
-    document.getElementById('success-modal').classList.remove('show');
-
-    // JI PAYPAL_ME diisi → buka PayPal di tab baru, LALU tutup modal dulu
-    if(CFG.PAYPAL_ME) {
-        var url = CFG.PAYPAL_ME;
-        // Pastikan ada / di akhir URL
-        if (url.indexOf('/paypal.me/') !== -1 && url.indexOf('/paypal.me/') !== -1 && url.indexOf('/') !== -1 && !url.endsWith('/')) url += '/';
-        window.open(url, '_blank');
+function showSuccessModal(orderId, grandTotal, currency, buyer) {
+    document.getElementById('modal-oid').textContent = 'Order ID: ' + orderId;
+    document.getElementById('modal-total').textContent = fmtPrice(grandTotal, currency);
+    
+    // Isi data pembeli
+    document.getElementById('modal-name').textContent = buyer.name;
+    document.getElementById('modal-phone').textContent = buyer.phone;
+    document.getElementById('modal-country').textContent = buyer.country;
+    document.getElementById('modal-addr').textContent = buyer.address;
+    
+    // Email hanya tampilkan kalau diisi
+    if (buyer.email && buyer.email.trim()) {
+        document.getElementById('modal-email-row').style.display = 'flex';
+        document.getElementById('modal-email').textContent = buyer.email;
+    } else {
+        document.getElementById('modal-email-row').style.display = 'none';
     }
+    
+    document.getElementById('success-modal').classList.add('show');
 }
 
 // =============================================
-// Tombol Complete Payment — dipanggil dari dalam modal
+// Complete Payment — buka PayPal dengan nominal otomatis
 // =============================================
 function completePayment() {
-    if(!CFG.PAYPAL_ME){return;}
-    var url = CFG.PAYPAL_ME;
-    if (url.indexOf('/paypal.me/') !== -1 && url.indexOf('/paypal.me/') !== -1 && url.indexOf('/') !== -1 && !url.endsWith('/')) url += '/';
-    window.open(url, '_blank');
-}
-
-// =============================================
-// Tampilkan modal sukses
-// =============================================
-function showSuccessModal() {
-    document.getElementById('success-modal').classList.add('show');
-    document.getElementById('complete-pay-btn').style.display = CFG.PAYPAL_ME ? 'inline-block' : 'none';
+    if (!CFG.PAYPAL_ME) {
+        showToast('PayPal link not configured', 'err');
+        return;
+    }
+    
+    // Format: https://paypal.me/novavariety/25.00USD
+    // Angka harus tanpa koma, pakai titik untuk desimal
+    const amount = lastGrandTotal.toFixed(2);
+    const currencyCode = lastCurrency.toUpperCase();
+    
+    // Bangun URL PayPal.me dengan nominal
+    let paypalUrl = CFG.PAYPAL_ME + '/' + amount + currencyCode;
+    
+    window.open(paypalUrl, '_blank');
 }
 
 // =============================================
